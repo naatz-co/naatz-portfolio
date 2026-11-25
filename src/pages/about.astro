@@ -1,7 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import aboutRaw from '../../raw/about.html?raw';
-import { transform } from '../lib/transform';
 import { site } from '../data/projects';
 
 const schema = [{
@@ -11,12 +9,176 @@ const schema = [{
   name: 'About • Nathalia Garcia',
   mainEntity: { '@id': `${site.url}/#person` },
 }];
+
+const facts = [
+  { k: 'Experience', v: '10+ years in B2B & B2B2C' },
+  { k: 'Currently', v: 'Product Designer at doola (YC S20)', href: 'https://www.doola.com/' },
+  { k: 'Building', v: 'ocalendar, event discovery 🇧🇷', href: 'https://ocalendar.io/' },
+  { k: 'Based in', v: 'São Paulo, Brazil' },
+];
 ---
 <Base title="About" description="Nathalia Garcia is a Brazilian Product Designer with 10+ years of experience in B2B and B2B2C, from SaaS and BI tools to AI-powered features. Based in São Paulo."
   image="VADMgL6TToEMrbOoqLbcalVBQ.png" schema={schema}>
-  <main id="content" class="case" set:html={transform(aboutRaw)} />
+  <main id="content" class="about">
+
+    <section class="ab-hero" aria-labelledby="ab-title">
+      <div class="ab-intro">
+        <p class="ab-eyebrow" data-a="mount">About me</p>
+        <h1 id="ab-title" data-a="mount">I'm a Product Designer with 10+ years of experience in B2B and B2B2C.</h1>
+        <p class="ab-lede" data-a="mount">Over the years, I've had the privilege of designing products across various industries, including Healthcare, Real estate, Business intelligence, and Entertainment, crafting solutions like SaaS platforms, BI tools, Productivity apps and AI-powered features.</p>
+        <div class="ab-cta" data-a="mount">
+          <a class="btn btn-primary" href="/#contact">Book a call</a>
+          <a class="btn" href={site.linkedin} target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <figure class="ab-photo" data-a="fade">
+        <img src="/images/MuDd075zDwLUPaO38aI0fSKw6g.webp" width="1079" height="1260" alt="Portrait of Nathalia Garcia" fetchpriority="high" decoding="async" />
+      </figure>
+    </section>
+
+    <dl class="ab-facts" data-a="up">
+      {facts.map((f) => (
+        <div>
+          <dt>{f.k}</dt>
+          <dd>{f.href ? <a href={f.href} target="_blank" rel="noopener">{f.v}</a> : f.v}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <section class="ab-row" aria-labelledby="ab-story">
+      <h2 id="ab-story" class="ab-label" data-a="up">How it started</h2>
+      <div class="ab-body">
+        <p class="ab-big" data-a="up">I started designing when I was 12, and it was because of Counter-Strike.</p>
+        <p data-a="up">I had a team there and we used to play in tournaments. Over time, we started winning a few of them, and that's when I realized we needed a website since every other team had one. That's when, between matches and school, I decided to learn HTML, CSS, Photoshop, and CorelDRAW. This decision completely changed my life as it immersed me in a new world: design.</p>
+        <p data-a="up">At some point, I realized I was spending more time designing than actually playing CS. The idea of creating something people could interact with totally hooked me. What started as a hobby became my job, and I still feel very lucky for that.</p>
+      </div>
+    </section>
+
+    <section class="ab-row" aria-labelledby="ab-approach">
+      <h2 id="ab-approach" class="ab-label" data-a="up">How I think about design</h2>
+      <div class="ab-body">
+        <p class="ab-big" data-a="up">Design has taught me that it's not just about making things look nice, it's about making them actually work.</p>
+        <p data-a="up">It's about understanding people, their habits, behaviors, and feelings. Realizing this shifted my focus from technology to the people.</p>
+        <p data-a="up">I love figuring out how things work and finding ways to make them better, whether by creating something new or improving what's already there.</p>
+        <blockquote data-a="up">For me, good design doesn't always need to reinvent the wheel. Small, thoughtful changes can also solve problems and make people's life easier and that's where my passion lies: designing systems that empower people and help improve their productivity.</blockquote>
+        <p data-a="up">Every project has been a chance to learn, evolve, and create something meaningful.</p>
+      </div>
+    </section>
+
+    <section class="ab-row" aria-labelledby="ab-outside">
+      <h2 id="ab-outside" class="ab-label" data-a="up">Outside of work</h2>
+      <div class="ab-body">
+        <div class="ab-side">
+          <a class="ab-card" href="https://ocalendar.io/events" target="_blank" rel="noopener" data-a="up">
+            <span class="ab-card-kicker">Side project</span>
+            <strong>ocalendar <span aria-hidden="true">↗</span></strong>
+            <span>Outside of my work, I'm building my first independent project with a partner. Our product, ocalendar, is a web app that gathers all city events in São Paulo into a user-friendly platform. Starting from scratch, we reached <b>10,000 organic visitors in the first 30 days</b> after our launch, and we've been experiencing a steady monthly increase in traffic ever since.</span>
+          </a>
+          <a class="ab-card" href="https://www.instagram.com/remont.ux" target="_blank" rel="noopener" data-a="up">
+            <span class="ab-card-kicker">Content</span>
+            <strong>Remont <span aria-hidden="true">↗</span></strong>
+            <span>I also talk about how old products influence our lives at Remont.</span>
+          </a>
+        </div>
+        <p data-a="up">I'm currently based in São Paulo, Brazil and when I'm not designing, you'll probably find me playing instruments, exploring new spots in the city, planning my next adventure, or writing ideas I hope to bring to life someday.</p>
+      </div>
+    </section>
+
+    <section class="ab-end" aria-labelledby="ab-chat">
+      <h2 id="ab-chat" data-a="up">If you've made it this far and want to know more, feel free to reach out, I'd love to chat!</h2>
+      <div class="ab-cta" data-a="up">
+        <a class="btn btn-primary" href="/#contact">Book a call</a>
+        <a class="btn" href={site.linkedin} target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
 </Base>
 
-<style is:global>
-  .about-copy a { color: rgb(23, 23, 23); }
+<style>
+  .about { --ink: rgb(23, 23, 23); --mute: rgb(98, 103, 111); --line: rgba(0, 0, 0, .09);
+    max-width: 1400px; margin: 0 auto; padding: calc(80px * var(--s)) var(--page-pad) calc(40px * var(--s)); color: var(--ink); }
+
+  /* hero */
+  .ab-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 80px; align-items: end; }
+  .ab-eyebrow { margin: 0 0 20px; font-size: 16px; color: var(--mute); }
+  .ab-hero h1 { margin: 0; font-size: 52px; line-height: 1.12; letter-spacing: -1.5px; font-weight: 500; text-wrap: balance; }
+  .ab-hero h1 span { color: rgb(128, 128, 128); }
+  .ab-lede { margin: 28px 0 0; max-width: 620px; font-size: 20px; line-height: 1.6; color: var(--mute); text-wrap: pretty; }
+  .ab-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--line);
+    font-size: 16px; font-weight: 500; color: var(--ink); text-decoration: none; background: rgba(255, 255, 255, .6); transition: background-color .25s, border-color .25s, transform .25s; }
+  .btn:hover { border-color: rgba(0, 0, 0, .2); background: #fff; }
+  .btn-primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .btn-primary:hover { background: rgb(46, 46, 46); border-color: rgb(46, 46, 46); }
+  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .ab-photo { margin: 0; border-radius: 24px; overflow: hidden; aspect-ratio: 4 / 5; background: rgba(0, 0, 0, .05); }
+  .ab-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+
+  /* quick facts */
+  .ab-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 80px 0 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .ab-facts > div { padding: 24px 24px 24px 0; }
+  .ab-facts > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+  .ab-facts dt { font-size: 14px; color: var(--mute); }
+  .ab-facts dd { margin: 6px 0 0; font-size: 17px; line-height: 1.4; font-weight: 500; }
+  .ab-facts a { color: inherit; text-decoration: underline; text-decoration-color: rgba(0, 0, 0, .25); text-underline-offset: 3px; }
+  .ab-facts a:hover { text-decoration-color: currentColor; }
+
+  /* two-column rows */
+  .ab-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 80px; padding: 96px 0; border-bottom: 1px solid var(--line); }
+  .ab-label { margin: 0; font-size: 18px; line-height: 1.4; font-weight: 500; color: var(--mute); align-self: start; position: sticky; top: 104px; }
+  .ab-body { display: flex; flex-direction: column; gap: 20px; max-width: 760px; }
+  .ab-body p { margin: 0; font-size: 18px; line-height: 1.7; color: var(--mute); text-wrap: pretty; }
+  .ab-body .ab-big { font-size: 32px; line-height: 1.3; letter-spacing: -.6px; font-weight: 500; color: var(--ink); text-wrap: balance; }
+  .ab-body blockquote { margin: 12px 0; padding: 4px 0 4px 24px; border-left: 2px solid var(--ink); font-size: 22px; line-height: 1.5; color: var(--ink); text-wrap: pretty; }
+  .ab-tags-group h3 { margin: 0 0 12px; font-size: 14px; font-weight: 500; color: var(--mute); }
+  .ab-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .ab-tags li { padding: 8px 16px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 16px; font-weight: 500; }
+  .ab-tags-group + .ab-tags-group { margin-top: 8px; }
+  .ab-link { color: var(--ink); font-weight: 500; text-decoration: none; }
+  .ab-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* outside of work */
+  .ab-side { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 12px; }
+  .ab-card { display: flex; flex-direction: column; gap: 8px; padding: 24px; border-radius: 20px; background: #fff; border: 1px solid var(--line);
+    text-decoration: none; color: var(--mute); font-size: 16px; line-height: 1.55; transition: border-color .25s, transform .35s cubic-bezier(.19, 0, .5, 1); }
+  .ab-card:hover { border-color: rgba(0, 0, 0, .2); transform: translateY(-2px); }
+  .ab-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .ab-card b { font-weight: 500; color: var(--ink); }
+  .ab-card strong { font-size: 22px; font-weight: 500; color: var(--ink); letter-spacing: -.3px; }
+  .ab-card-kicker { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
+  .ab-stat { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
+  .ab-stat b { font-size: 20px; font-weight: 500; color: var(--ink); }
+
+  /* closing */
+  .ab-end { padding: 120px 0 64px; text-align: center; }
+  .ab-end h2 { margin: 0 auto; max-width: 820px; font-size: 40px; line-height: 1.2; letter-spacing: -1px; font-weight: 500; text-wrap: balance; }
+  .ab-end p { margin: 12px 0 0; font-size: 18px; color: var(--mute); }
+  .ab-end .ab-cta { justify-content: center; }
+
+  @media (max-width: 1099.98px) {
+    .ab-hero { gap: 48px; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); }
+    .ab-hero h1 { font-size: 44px; }
+    .ab-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ab-facts > div:nth-child(3) { padding-left: 0; border-left: 0; }
+    .ab-facts > div:nth-child(n + 3) { border-top: 1px solid var(--line); }
+    .ab-row { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 72px 0; }
+    .ab-label { position: static; }
+    .ab-body .ab-big { font-size: 28px; }
+  }
+  @media (max-width: 809.98px) {
+    .ab-hero { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .ab-photo { order: -1; width: 140px; aspect-ratio: 1; border-radius: 20px; }
+    .ab-hero h1 { font-size: 34px; letter-spacing: -.8px; }
+    .ab-lede { font-size: 17px; }
+    .ab-facts { margin-top: 48px; grid-template-columns: minmax(0, 1fr); }
+    .ab-facts > div, .ab-facts > div + div { padding: 16px 0; border-left: 0; }
+    .ab-facts > div + div { border-top: 1px solid var(--line); }
+    .ab-row { padding: 56px 0; }
+    .ab-body .ab-big { font-size: 24px; }
+    .ab-body p { font-size: 16px; }
+    .ab-body blockquote { font-size: 18px; padding-left: 16px; }
+    .ab-side { grid-template-columns: minmax(0, 1fr); }
+    .ab-end { padding: 80px 0 40px; }
+    .ab-end h2 { font-size: 30px; }
+  }
 </style>
