@@ -129,23 +129,42 @@ const graph = [person, website, ...schema];
         io.observe(el);
       });
 
-      // Slides (prev/next + optional autoplay)
+      // Slides (prev/next, pagination dots, optional autoplay loop)
       document.querySelectorAll<HTMLElement>('.slides').forEach((root) => {
         const track = root.querySelector<HTMLElement>('.slides-track')!;
-        const step = () => (track.firstElementChild as HTMLElement).offsetWidth + 16;
-        const go = (dir: number) => {
-          const max = track.scrollWidth - track.clientWidth - 2;
-          if (dir > 0 && track.scrollLeft >= max) track.scrollTo({ left: 0, behavior: 'smooth' });
-          else if (dir < 0 && track.scrollLeft <= 2) track.scrollTo({ left: max, behavior: 'smooth' });
-          else track.scrollBy({ left: dir * step(), behavior: 'smooth' });
+        const n = track.children.length;
+        const loop = !!root.dataset.autoplay;
+        const prev = root.querySelector<HTMLButtonElement>('.slides-prev');
+        const next = root.querySelector<HTMLButtonElement>('.slides-next');
+        const dotsEl = root.querySelector<HTMLElement>('.slides-dots');
+        const idx = () => Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+        const to = (i: number) => track.scrollTo({ left: ((i + n) % n) * (track.scrollWidth / n), behavior: 'smooth' });
+        const dots = Array.from({ length: n }, (_, i) => {
+          const d = document.createElement('button');
+          d.type = 'button';
+          d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          d.addEventListener('click', () => to(i));
+          dotsEl?.append(d);
+          return d;
+        });
+        const sync = () => {
+          const i = idx();
+          dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
+          if (!loop) { if (prev) prev.hidden = i === 0; if (next) next.hidden = i === n - 1; }
         };
-        root.querySelector('.slides-prev')?.addEventListener('click', () => go(-1));
-        root.querySelector('.slides-next')?.addEventListener('click', () => go(1));
+        let raf = 0;
+        track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); }, { passive: true });
+        sync();
+        prev?.addEventListener('click', () => to(idx() - 1));
+        next?.addEventListener('click', () => to(idx() + 1));
         const ms = Number(root.dataset.autoplay);
         if (ms && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          let t = setInterval(() => go(1), ms);
+          let t = 0;
+          const start = () => { clearInterval(t); t = window.setInterval(() => to(idx() + 1), ms); };
+          const vis = new IntersectionObserver(([e]) => (e.isIntersecting ? start() : clearInterval(t)));
+          vis.observe(root);
           root.addEventListener('pointerenter', () => clearInterval(t));
-          root.addEventListener('pointerleave', () => (t = setInterval(() => go(1), ms)));
+          root.addEventListener('pointerleave', start);
         }
       });
 

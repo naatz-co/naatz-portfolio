@@ -47,7 +47,7 @@ main.case > section { padding-left: var(--page-pad) !important; padding-right: v
 .col > *, .grid > * { min-width: 0; }
 .col > :not(.f1) { width: 100%; }
 .f1 { flex: 1 1 0; min-width: 0; }
-.grid { display: grid; gap: 10px 40px; }
+.grid { display: grid; gap: 0; }
 .g1 { grid-template-columns: minmax(0, 1fr); }
 .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -139,16 +139,24 @@ body.dark .crumbs [aria-current] { color: #fff; }
 .tk p { margin: 0; color: rgb(148, 150, 157); font-size: 18px; line-height: 1.5; }
 
 /* slides (Framer Slideshow / Carousel) */
-.slides { position: relative; }
-.slides-track { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 24px; }
+.slides { position: relative; --inset: 20px; }
+.slides-card { --inset: 40px; }
+.slides-track { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .slides-track::-webkit-scrollbar { display: none; }
-.slides-track > * { scroll-snap-align: center; }
-.slides-2 .slides-track { grid-auto-columns: calc(50% - 8px); }
-@media (max-width: 809.98px) { .slides-2 .slides-track { grid-auto-columns: 88%; } }
-.slides button { position: absolute; top: 50%; translate: 0 -50%; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .25); color: #fff; font-size: 24px; line-height: 1; cursor: pointer; backdrop-filter: blur(6px); }
-.slides button:hover { background: rgba(0, 0, 0, .45); }
-.slides-prev { left: 16px; }
-.slides-next { right: 16px; }
+.slides-track > * { scroll-snap-align: start; }
+.slides > button { position: absolute; top: 50%; translate: 0 -50%; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .2); color: #fff; cursor: pointer; transition: opacity .2s, background-color .2s; }
+.slides > button:hover { background: rgba(0, 0, 0, .35); }
+.slides > button[hidden] { display: grid; opacity: 0; pointer-events: none; }
+.slides-prev { left: var(--inset); }
+.slides-next { right: var(--inset); }
+.slides-dots { position: absolute; left: 50%; bottom: 40px; translate: -50% 0; display: flex; border-radius: 50px; }
+.slides-card .slides-dots { background: rgba(0, 0, 0, .2); }
+.slides-dots button { width: 20px; height: 20px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.slides-dots button:first-child, .slides-dots button:last-child { width: 27px; }
+.slides-dots button:first-child { justify-items: end; padding-right: 5px; } .slides-dots button:last-child { justify-items: start; padding-left: 5px; }
+.slides-dots button::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #fff; opacity: .5; transition: opacity .2s; }
+.slides-dots button[aria-current="true"]::before { opacity: 1; }
+@media (max-width: 809.98px) { .slides { --inset: 10px; } .slides-dots { bottom: 16px; } }
 
 /* tabs (ocalendar strategy) */
 .tabs { display: flex; flex-direction: column; gap: 32px; }

@@ -51,7 +51,7 @@ const schema = [
 ];
 ---
 <Base title={p.seoTitle} description={p.seoDescription} image={p.cover} imageAlt={p.coverAlt}
-  bg={p.bg} theme={p.theme} schema={schema} type="article">
+  bg={p.bg} theme={p.theme} schema={schema} type="article" bodyClass={`case-${p.slug}`}>
   <main id="content" class="case" set:html={html} />
   <aside class="more" aria-labelledby="more-title">
     <h2 id="more-title">More work</h2>
