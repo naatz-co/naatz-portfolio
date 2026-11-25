@@ -62,7 +62,9 @@ const schema = [
 </Base>
 
 <style>
-  .more { max-width: 1400px; margin: 0 auto; padding: calc(96px * var(--s)) var(--page-pad) 24px; }
+  .more { max-width: 1400px; margin: 0 auto; padding: calc(40px * var(--s)) var(--page-pad) 24px; }
+  .more::before { content: ""; display: block; height: 1px; margin-bottom: calc(80px * var(--s)); background: rgba(0, 0, 0, .1); }
+  :global(body.dark) .more::before { background: rgba(255, 255, 255, .12); }
   .more h2 { margin: 0 0 24px; font-size: 18px; font-weight: 500; letter-spacing: -.02em; color: rgb(128, 128, 128); }
   .more-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
   @media (max-width: 809.98px) { .more-grid { grid-template-columns: 1fr; gap: 24px; } }
