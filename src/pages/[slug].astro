@@ -67,3 +67,6 @@ const schema = [
   :global(body.dark) .more::before { background: rgba(255, 255, 255, .12); }
   .more h2 { margin: 0 0 calc(40px * var(--s)); color: rgb(23, 23, 23); }
   :global(body.dark) .more h2 { color: rgb(255, 255, 255); }
+  .more-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+  @media (max-width: 809.98px) { .more-grid { grid-template-columns: 1fr; gap: 24px; } }
+</style>
