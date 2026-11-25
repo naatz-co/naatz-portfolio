@@ -97,6 +97,10 @@ const links = isHome
     desktop.addEventListener('change', () => { compact = null; update(); });
   } else {
     requestAnimationFrame(() => nav.classList.add('in'));
+    // Sticky case nav: show a translucent backdrop once the page is scrolled
+    const onScroll = () => nav.classList.toggle('scrolled', scrollY > 4);
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
   }
 </script>
 
@@ -134,6 +138,9 @@ const links = isHome
     opacity: 0; transform: translateY(-20px); transition: opacity .8s cubic-bezier(.44, 0, .56, 1) .5s, transform .8s cubic-bezier(.44, 0, .56, 1) .5s; }
   :global(html:not(.js)) .nv-case .nv-bar, .nv-case.in .nv-bar { opacity: 1; transform: none; }
   .nv-case .nv-logo img { display: block; width: 70.5px; height: auto; }
+  .nv-case { position: sticky; top: 0; transition: background-color .3s ease, box-shadow .3s ease; }
+  .nv-case.scrolled { background: color-mix(in srgb, var(--bg, #fff) 84%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(16px); backdrop-filter: saturate(1.4) blur(16px); box-shadow: 0 1px 0 rgba(0, 0, 0, .06); }
+  :global(body.dark) .nv-case.scrolled { box-shadow: 0 1px 0 rgba(255, 255, 255, .08); }
   .nv-case .nv-links { display: flex; gap: 16px; }
   @media (max-width: 1099.98px) { .nv-case .nv-bar { padding: 0 40px; } }
   @media (min-width: 1100px) { :global(body.case-olos-automation) .nv-case .nv-bar { padding: 0 48px; } }
