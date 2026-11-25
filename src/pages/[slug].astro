@@ -51,10 +51,10 @@ const schema = [
 ];
 ---
 <Base title={p.seoTitle} description={p.seoDescription} image={p.cover} imageAlt={p.coverAlt}
-  bg={p.bg} theme={p.theme} schema={schema} type="article">
+  bg={p.bg} theme={p.theme} schema={schema} type="article" bodyClass={`case-${p.slug}`}>
   <main id="content" class="case" set:html={html} />
   <aside class="more" aria-labelledby="more-title">
-    <h2 id="more-title">More work</h2>
+    <h2 id="more-title" class="type-title-lg">More work</h2>
     <div class="more-grid">
       {more.map((m) => <ProjectCard project={m} headingLevel="h3" />)}
     </div>
@@ -62,8 +62,11 @@ const schema = [
 </Base>
 
 <style>
-  .more { max-width: 1400px; margin: 0 auto; padding: calc(96px * var(--s)) var(--page-pad) 24px; }
-  .more h2 { margin: 0 0 24px; font-size: 18px; font-weight: 500; letter-spacing: -.02em; color: rgb(128, 128, 128); }
+  .more { max-width: 1400px; margin: 0 auto; padding: calc(40px * var(--s)) var(--page-pad) 24px; }
+  .more::before { content: ""; display: block; height: 1px; margin-bottom: calc(80px * var(--s)); background: var(--c-line); }
+  :global(body.dark) .more::before { background: var(--c-line-on-dark); }
+  .more h2 { margin: 0 0 calc(40px * var(--s)); color: var(--c-ink); }
+  :global(body.dark) .more h2 { color: var(--c-on-dark); }
   .more-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
   @media (max-width: 809.98px) { .more-grid { grid-template-columns: 1fr; gap: 24px; } }
 </style>

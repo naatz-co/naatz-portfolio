@@ -1,4 +1,7 @@
 ---
+// Framer "Case Thumbnail": white card, 16/16/24 padding, 26px radius, 1px hairline border.
+// Appears with opacity 0 + scale .95 (1s, ease .19,0,.5,1, .2s delay).
+// Hover (spring stiffness 500 / damping 60): image zooms to ~109%, subtitle turns dark.
 import type { Project } from '../data/projects';
 import { imgAttrs } from '../lib/transform';
 interface Props { project: Project; eager?: boolean; headingLevel?: 'h2' | 'h3' }
@@ -6,7 +9,7 @@ const { project: p, eager = false, headingLevel = 'h2' } = Astro.props;
 const img = imgAttrs(p.cover);
 const H = headingLevel;
 ---
-<a class="card reveal" href={`/${p.slug}`}>
+<a class="card" data-a="card" href={`/${p.slug}`}>
   <figure class="card-media">
     <img src={img.src} width={img.width} height={img.height} alt={p.coverAlt}
       loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} decoding="async"
@@ -19,12 +22,27 @@ const H = headingLevel;
 </a>
 
 <style>
-  .card { display: flex; flex-direction: column; gap: 24px; padding: 16px 16px 24px; border-radius: 26px; background: #fff; border: 1px solid rgba(0, 0, 0, .05); text-decoration: none; color: inherit; transition: box-shadow .4s, translate .4s; }
-  .card:hover { box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06); translate: 0 -2px; }
-  .card-media { margin: 0; border-radius: 24px; overflow: hidden; aspect-ratio: 528 / 391; background: #eee; }
-  .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: scale .8s cubic-bezier(.19, 0, .5, 1); }
-  .card:hover .card-media img { scale: 1.03; }
+  .card { --hover: cubic-bezier(.25, .8, .3, 1);
+    display: flex; flex-direction: column; gap: 24px; padding: 16px 16px 24px; border-radius: 26px; background: var(--c-white);
+    border: 1px solid var(--c-line-soft); text-decoration: none; color: inherit; }
+  @supports (transition-timing-function: linear(0, 1)) {
+    .card { --hover: linear(0, .0862 4.2%, .2365 8.3%, .3817 12.5%, .5052 16.7%, .6058 20.8%, .6866 25%, .7509 29.2%, .8022 33.3%, .8429 37.5%, .8752 41.7%, .9009 45.8%, .9213 50%, .9375 54.2%, .9503 58.3%, .9606 62.5%, .9687 66.7%, .9751 70.8%, .9802 75%, .9843 79.2%, .9875 83.3%, .9901 87.5%, .9921 91.7%, .9938 95.8%, 1); }
+  }
+  .card-media { margin: 0; border-radius: 24px; overflow: hidden; aspect-ratio: 568 / 391; background: var(--c-placeholder); isolation: isolate; }
+  .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s var(--hover); }
+  .card:hover .card-media img, .card:focus-visible .card-media img { transform: scale(1.089); }
   .card-text { padding-left: 4px; line-height: 1.5; }
-  .card-title { margin: 0; font-size: 16px; font-weight: 400; color: rgb(23, 23, 23); }
-  .card-sub { margin: 0; color: rgb(128, 128, 128); }
+  .card-title { margin: 0; font-size: 16px; font-weight: 400; color: var(--c-ink); }
+  .card-sub { margin: 0; color: var(--c-gray); transition: color .55s var(--hover); }
+  .card:hover .card-sub, .card:focus-visible .card-sub { color: var(--c-ink); }
+  .card { transition: background-color .35s var(--hover), border-color .35s var(--hover); }
+  .card:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  /* dark case pages (ocalendar, James): card a step lighter than the page */
+  :global(body.dark) .card { background: var(--c-surface-dark); border-color: var(--c-line-on-dark-soft); }
+  :global(body.dark) .card:hover, :global(body.dark) .card:focus-visible { background: var(--c-surface-dark-hover); border-color: var(--c-line-on-dark-strong); }
+  :global(body.dark) .card-media { background: var(--c-surface-dark-raised); }
+  :global(body.dark) .card-title { color: var(--c-on-dark-soft); }
+  :global(body.dark) .card-sub { color: var(--c-on-dark-muted); }
+  :global(body.dark) .card:hover .card-sub, :global(body.dark) .card:focus-visible .card-sub { color: var(--c-on-dark-soft); }
+  @media (prefers-reduced-motion: reduce) { .card-media img, .card-sub { transition: none; } }
 </style>

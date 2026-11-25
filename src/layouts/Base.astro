@@ -3,6 +3,7 @@ import '@fontsource-variable/inter/opsz.css';
 import '../styles/global.css';
 import { site } from '../data/projects';
 import { imgAttrs } from '../lib/transform';
+import Header from '../components/Header.astro';
 
 interface Props {
   title?: string;
@@ -15,6 +16,7 @@ interface Props {
   noindex?: boolean;
   type?: 'website' | 'article';
   bodyClass?: string;
+  nav?: 'home' | 'case';
 }
 
 const {
@@ -22,12 +24,13 @@ const {
   description = site.description,
   image = site.socialImage,
   imageAlt = 'Nathalia Garcia – Product Designer',
-  bg = '#fff',
+  bg = 'rgb(255, 255, 255)',
   theme = 'light',
   schema = [],
   noindex = false,
   type = 'website',
   bodyClass = '',
+  nav = 'case',
 } = Astro.props;
 
 const fullTitle = title ? `${title} • ${site.name}` : site.title;
@@ -103,81 +106,97 @@ const graph = [person, website, ...schema];
       gtag('js', new Date());
       gtag('config', ga);
     </script>
-    <script is:inline defer src="https://cdn.visitors.now/v.js" data-token="e81079eb-9346-4434-b8a1-68f05fce743e"></script>
   </head>
   <body class={`${theme} ${bodyClass}`.trim()} style={`--bg:${bg}`}>
     <a class="skip" href="#content">Skip to content</a>
-    <header class="site-header">
-      <div class="inner">
-        <a class="logo" href="/" aria-label="naatz – home">
-          <img src="/images/dVPLBFaNnDO7guQyd0rzMKlg64.svg" alt="naatz." width="71" height="18" />
-        </a>
-        <nav class="nav" aria-label="Main">
-          <a href="/about" aria-current={current('/about')}>About</a>
-          <a href="/#work">Work</a>
-          <a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a>
-        </nav>
-      </div>
-    </header>
+    <Header variant={nav} current={path} />
 
     <slot />
 
     <footer class="site-footer">
-      <span>© {new Date().getFullYear()} – Nathalia Garcia</span>
-      <span><a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a> · <a href="/about">About</a></span>
+      <p>© {new Date().getFullYear()} – Nathalia Garcia</p>
     </footer>
 
     <script>
-      // Header background once the page scrolls
-      const header = document.querySelector('.site-header');
-      const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
-      addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-
-      // Reveal on scroll
+      // Framer-style appear effects: [data-a] elements animate once when they enter the viewport.
+      // Content is fully visible without JS (the hidden state only applies under html.js), so SEO is unaffected.
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      }, { rootMargin: '0px 0px -8% 0px' });
-      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-
-      // Slides (prev/next + optional autoplay)
-      document.querySelectorAll<HTMLElement>('.slides').forEach((root) => {
-        const track = root.querySelector<HTMLElement>('.slides-track')!;
-        const step = () => (track.firstElementChild as HTMLElement).offsetWidth + 16;
-        const go = (dir: number) => {
-          const max = track.scrollWidth - track.clientWidth - 2;
-          if (dir > 0 && track.scrollLeft >= max) track.scrollTo({ left: 0, behavior: 'smooth' });
-          else if (dir < 0 && track.scrollLeft <= 2) track.scrollTo({ left: max, behavior: 'smooth' });
-          else track.scrollBy({ left: dir * step(), behavior: 'smooth' });
-        };
-        root.querySelector('.slides-prev')?.addEventListener('click', () => go(-1));
-        root.querySelector('.slides-next')?.addEventListener('click', () => go(1));
-        const ms = Number(root.dataset.autoplay);
-        if (ms && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          let t = setInterval(() => go(1), ms);
-          root.addEventListener('pointerenter', () => clearInterval(t));
-          root.addEventListener('pointerleave', () => (t = setInterval(() => go(1), ms)));
-        }
+      }, { threshold: 0 });
+      document.querySelectorAll('[data-a]').forEach((el) => {
+        if (el.closest('.slides, .feat')) return el.classList.add('in');
+        if ((el as HTMLElement).dataset.a === 'mount') return requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+        io.observe(el);
       });
 
-      // Tabs
-      document.querySelectorAll<HTMLElement>('.tabs').forEach((root) => {
-        const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
-        const select = (tab: HTMLButtonElement) => {
-          for (const t of tabs) {
-            const on = t === tab;
-            t.setAttribute('aria-selected', String(on));
-            t.tabIndex = on ? 0 : -1;
-            root.querySelector<HTMLElement>('#' + t.getAttribute('aria-controls'))!.hidden = !on;
-          }
-        };
-        tabs.forEach((t, i) => {
-          t.addEventListener('click', () => select(t));
-          t.addEventListener('keydown', (e) => {
-            const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-            if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; select(n); n.focus(); }
+      // Auto-advancing feature list (ocalendar categories)
+      document.querySelectorAll<HTMLElement>('.feat').forEach((root) => {
+        const items = [...root.querySelectorAll<HTMLElement>('.feat-item')];
+        const imgs = [...root.querySelectorAll<HTMLElement>('.feat-img')];
+        const auto = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.style.setProperty('--t', `${Number(root.dataset.interval || 6000) / 1000}s`);
+        let cur = 0;
+        const select = (i: number) => {
+          cur = (i + items.length) % items.length;
+          items.forEach((it, k) => {
+            it.classList.toggle('on', k === cur);
+            it.querySelector('button')!.setAttribute('aria-expanded', String(k === cur));
+            const bar = it.querySelector<HTMLElement>('.feat-bar i');
+            if (bar) { bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = ''; }
           });
+          imgs.forEach((im, k) => im.classList.toggle('on', k === cur));
+        };
+        items.forEach((it, k) => {
+          it.querySelector('button')!.addEventListener('click', () => select(k));
+          it.querySelector('.feat-bar i')?.addEventListener('animationend', () => { if (k === cur) select(cur + 1); });
         });
+        if (!auto) return;
+        let hover = false, seen = false;
+        const sync = () => root.classList.toggle('paused', hover || !seen);
+        root.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { hover = true; sync(); } });
+        root.addEventListener('pointerleave', () => { hover = false; sync(); });
+        new IntersectionObserver(([e]) => { seen = e.isIntersecting; sync(); }, { threshold: 0.35 }).observe(root);
+        sync();
+        root.classList.add('run');
+      });
+
+      // Slides (prev/next, pagination dots, optional autoplay loop)
+      document.querySelectorAll<HTMLElement>('.slides').forEach((root) => {
+        const track = root.querySelector<HTMLElement>('.slides-track')!;
+        const n = track.children.length;
+        const loop = !!root.dataset.autoplay;
+        const prev = root.querySelector<HTMLButtonElement>('.slides-prev');
+        const next = root.querySelector<HTMLButtonElement>('.slides-next');
+        const dotsEl = root.querySelector<HTMLElement>('.slides-dots');
+        const idx = () => Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+        const to = (i: number) => track.scrollTo({ left: ((i + n) % n) * (track.scrollWidth / n), behavior: 'smooth' });
+        const dots = Array.from({ length: n }, (_, i) => {
+          const d = document.createElement('button');
+          d.type = 'button';
+          d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          d.addEventListener('click', () => to(i));
+          dotsEl?.append(d);
+          return d;
+        });
+        const sync = () => {
+          const i = idx();
+          dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
+          if (!loop) { if (prev) prev.hidden = i === 0; if (next) next.hidden = i === n - 1; }
+        };
+        let raf = 0;
+        track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); }, { passive: true });
+        sync();
+        prev?.addEventListener('click', () => to(idx() - 1));
+        next?.addEventListener('click', () => to(idx() + 1));
+        const ms = Number(root.dataset.autoplay);
+        if (ms && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          let t = 0;
+          const start = () => { clearInterval(t); t = window.setInterval(() => to(idx() + 1), ms); };
+          const vis = new IntersectionObserver(([e]) => (e.isIntersecting ? start() : clearInterval(t)));
+          vis.observe(root);
+          root.addEventListener('pointerenter', () => clearInterval(t));
+          root.addEventListener('pointerleave', start);
+        }
       });
 
       // Play muted loop videos only while visible
