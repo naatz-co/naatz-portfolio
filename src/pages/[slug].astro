@@ -67,9 +67,3 @@ const schema = [
   :global(body.dark) .more::before { background: rgba(255, 255, 255, .12); }
   .more h2 { margin: 0 0 calc(40px * var(--s)); color: rgb(23, 23, 23); }
   :global(body.dark) .more h2 { color: rgb(255, 255, 255); }
-  /* light pages: cards a shade of gray so they stand out from the white page */
-  :global(body:not(.dark)) .more :global(.card) { background: rgb(244, 244, 244); border-color: rgba(0, 0, 0, .04); }
-  :global(body:not(.dark)) .more :global(.card:hover), :global(body:not(.dark)) .more :global(.card:focus-visible) { background: rgb(237, 237, 237); border-color: rgba(0, 0, 0, .08); }
-  .more-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
-  @media (max-width: 809.98px) { .more-grid { grid-template-columns: 1fr; gap: 24px; } }
-</style>
