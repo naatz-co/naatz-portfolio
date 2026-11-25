@@ -215,7 +215,7 @@ body.dark .crumbs [aria-current] { color: #fff; }
 .feat-media { display: grid; place-items: center; padding: 40px; }
 .feat-img { grid-area: 1 / 1; width: 100%; max-width: 560px; aspect-ratio: 483 / 375; border-radius: 16px; overflow: hidden; opacity: 0; transform: scale(1.03); transition: opacity .6s ease, transform .9s cubic-bezier(.19, 0, .5, 1); }
 .feat-img.on { opacity: 1; transform: none; }
-.feat-img img { width: 100%; height: 100%; object-fit: cover; }
+.feat .feat-img img { width: 100%; height: 100%; max-width: none; object-fit: cover; display: block; }
 @media (max-width: 1099.98px) { .feat-item button { padding: 24px; font-size: 20px; } .feat-body p { padding: 0 24px 24px 92px; font-size: 16px; } .feat-media { padding: 24px; } }
 @media (max-width: 809.98px) {
   .feat { grid-template-columns: minmax(0, 1fr); }
