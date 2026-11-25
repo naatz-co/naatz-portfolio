@@ -74,10 +74,11 @@ const schema = [{
   .ab2-who strong { font-weight: 500; }
   .ab2-who span { color: var(--c-gray); }
 
-  .ab2-hero h1 { margin: 40px 0 0; max-width: 1120px; font-size: 40px; line-height: 1.3; letter-spacing: -1px; font-weight: 500; text-wrap: pretty; }
+  /* sized to the content width so the intro never runs past 4 lines */
+  .ab2-hero h1 { margin: 40px 0 0; font-size: min(36px, calc((100vw - 2 * var(--page-pad)) / 35)); line-height: 1.3; letter-spacing: -.8px; font-weight: 500; text-wrap: pretty; }
   .ab2-hero h1 span { color: var(--c-gray); }
 
-  .ab2-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 80px; margin-top: 120px; padding-top: 48px; border-top: 1px solid var(--c-line); }
+  .ab2-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 80px; margin-top: 120px; }
   .ab2-photo { margin: 0; position: sticky; top: 104px; align-self: start; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 5; background: var(--c-line-soft); }
   .ab2-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
 
@@ -99,14 +100,14 @@ const schema = [{
   .ab2-btn-primary:hover { background: var(--c-ink-soft); border-color: var(--c-ink-soft); }
 
   @media (max-width: 1099.98px) {
-    .ab2-hero h1 { font-size: 32px; letter-spacing: -.6px; } .ab2-end h2 { font-size: 34px; }
+    .ab2-end h2 { font-size: 34px; }
     .ab2-grid { gap: 48px; margin-top: 80px; }
     .ab2-chapters { gap: 72px; }
   }
   @media (max-width: 809.98px) {
     .ab2-hero h1 { font-size: 24px; letter-spacing: -.3px; } .ab2-end h2 { font-size: 28px; }
     .ab2-hero h1 { margin-top: 28px; }
-    .ab2-grid { grid-template-columns: minmax(0, 1fr); margin-top: 56px; padding-top: 32px; }
+    .ab2-grid { grid-template-columns: minmax(0, 1fr); margin-top: 56px; }
     .ab2-photo { position: static; max-width: 360px; }
     .ab2-chapters { gap: 56px; }
     .ab2-ch p { font-size: 16px; }
