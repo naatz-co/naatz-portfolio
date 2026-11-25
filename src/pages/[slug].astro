@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects, site } from '../data/projects';
+import { transform } from '../lib/transform';
+
+const raw = import.meta.glob('../../raw/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const file: Record<string, string> = {
+  ocalendar: 'ocalendar',
+  'metabase-activation': 'metabase',
+  'loft-james-platform': 'james',
+  'inyou-app': 'inyou',
+  'loft-renovation-hub': 'renovation',
+  'olos-automation': 'olos',
+};
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const i = projects.findIndex((p) => p.slug === slug);
+const p = projects[i];
+const html = transform(raw[`../../raw/${file[slug!]}.html`]);
+const more = [projects[(i + 1) % projects.length], projects[(i + 2) % projects.length]];
+const url = `${site.url}/${p.slug}`;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': `${url}#work`,
+    name: p.seoTitle,
+    headline: p.title,
+    description: p.seoDescription,
+    url,
+    image: `${site.url}/images/${p.cover}`,
+    dateCreated: p.year,
+    inLanguage: 'en',
+    creator: { '@id': `${site.url}/#person` },
+    about: p.role,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Work', item: `${site.url}/#work` },
+      { '@type': 'ListItem', position: 2, name: p.title, item: url },
+    ],
+  },
+];
+---
+<Base title={p.seoTitle} description={p.seoDescription} image={p.cover} imageAlt={p.coverAlt}
+  bg={p.bg} theme={p.theme} schema={schema} type="article">
+  <main id="content" class="case" set:html={html} />
+  <aside class="more" aria-labelledby="more-title">
+    <h2 id="more-title">More work</h2>
+    <div class="more-grid">
+      {more.map((m) => <ProjectCard project={m} headingLevel="h3" />)}
+    </div>
+  </aside>
+</Base>
+
+<style>
+  .more { max-width: 1400px; margin: 0 auto; padding: calc(96px * var(--s)) var(--page-pad) 24px; }
+  .more h2 { margin: 0 0 24px; font-size: 18px; font-weight: 500; letter-spacing: -.02em; color: rgb(128, 128, 128); }
+  .more-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+  @media (max-width: 809.98px) { .more-grid { grid-template-columns: 1fr; gap: 24px; } }
+</style>

@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects, site } from '../data/projects';
+import { imgAttrs } from '../lib/transform';
+
+const avatar = imgAttrs('e88cz1fhYhgRfwqC3kjjVoI1fkw.jpeg');
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: site.url,
+    name: site.title,
+    mainEntity: { '@id': `${site.url}/#person` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Selected work',
+    itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${site.url}/${p.slug}`, name: p.title })),
+  },
+];
+---
+<Base bg="rgb(242, 242, 242)" schema={schema} bodyClass="home">
+  <div class="wordmark" aria-hidden="true">
+    <img src="/images/dVPLBFaNnDO7guQyd0rzMKlg64.svg" alt="" width="1400" height="357" fetchpriority="high" />
+  </div>
+
+  <main id="content" class="home">
+    <section class="intro" aria-labelledby="intro-title">
+      <a href="/about" class="avatar" aria-label="About Nathalia">
+        <img src={avatar.src} width="96" height="96" alt="Portrait of Nathalia Garcia" fetchpriority="high" />
+      </a>
+      <h1 id="intro-title">
+        <span class="sr-only">Nathalia Garcia, </span>Product designer currently working at
+        <a href="https://www.doola.com/" target="_blank" rel="noopener">doola (YC S20)</a> and building
+        <a class="muted" href="https://ocalendar.io/" target="_blank" rel="noopener">ocalendar</a>, an event discovery platform 🇧🇷
+      </h1>
+      <p class="links"><a href="/about">About me</a><span aria-hidden="true">•</span><a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a></p>
+      <a class="see-work" href="#work">See selected works ↓</a>
+    </section>
+
+    <section id="work" class="work" aria-labelledby="work-title">
+      <h2 id="work-title" class="sr-only">Selected work</h2>
+      <div class="grid-cards">
+        {projects.map((p, i) => <ProjectCard project={p} eager={i < 2} headingLevel="h3" />)}
+      </div>
+    </section>
+
+    <section class="contact" aria-labelledby="contact-title">
+      <p class="emoji" aria-hidden="true">💬</p>
+      <h2 id="contact-title">Do you want to know more about me?</h2>
+      <p class="sub">Feel free to book some time below!</p>
+      <div class="cal" id="cal-embed" data-cal-link="naatz/general-chat">
+        <a class="cal-fallback" href="https://cal.com/naatz/general-chat" target="_blank" rel="noopener">Book a call on cal.com →</a>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<script>
+  // Show the small header logo only after the big wordmark scrolls away
+  const mark = document.querySelector('.wordmark');
+  const head = document.querySelector('.site-header');
+  if (mark && head) new IntersectionObserver(([e]) => head.classList.toggle('past', !e.isIntersecting), { rootMargin: '-72px 0px 0px 0px' }).observe(mark);
+
+  // Load the cal.com scheduler only when it is about to be seen (keeps the page fast)
+  const box = document.getElementById('cal-embed');
+  if (box) {
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      const w = window as any;
+      (function (C: any, A: string, L: string) {
+        const p = (a: any, ar: any) => a.q.push(ar);
+        const d = C.document;
+        C.Cal = C.Cal || function () {
+          const cal = C.Cal; const ar = arguments;
+          if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement('script')).src = A; cal.loaded = true; }
+          if (ar[0] === L) { const api: any = function () { p(api, arguments); }; const ns = ar[1]; api.q = api.q || [];
+            if (typeof ns === 'string') { cal.ns[ns] = cal.ns[ns] || api; p(cal.ns[ns], ar); p(cal, ['initNamespace', ns]); } else p(cal, ar); return; }
+          p(cal, ar);
+        };
+      })(w, 'https://app.cal.com/embed/embed.js', 'init');
+      w.Cal('init', 'general-chat', { origin: 'https://cal.com' });
+      box.innerHTML = '';
+      w.Cal.ns['general-chat']('inline', { elementOrSelector: '#cal-embed', calLink: 'naatz/general-chat', config: { layout: 'month_view', theme: 'light' } });
+      w.Cal.ns['general-chat']('ui', { theme: 'light', cssVarsPerTheme: { light: { 'cal-brand': '#292929' } }, hideEventTypeDetails: false, layout: 'month_view' });
+    }, { rootMargin: '400px' });
+    io.observe(box);
+  }
+</script>
+
+<style>
+  :global(.sr-only) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :global(body.home .site-header .logo) { transition: opacity .3s; }
+  @media (min-width: 810px) { :global(body.home .site-header:not(.past) .logo) { opacity: 0; pointer-events: none; } }
+  .wordmark { max-width: 1400px; margin: 0 auto; padding: 8px 12px 0; }
+  .wordmark img { display: block; width: 100%; height: auto; }
+  .home { max-width: 1400px; margin: 0 auto; padding: 0 var(--page-pad) 40px; }
+  .intro { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; padding: calc(96px * var(--s)) 0 calc(56px * var(--s)); position: relative; }
+  .avatar { width: 96px; height: 96px; border-radius: 50%; overflow: hidden; display: block; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .intro h1 { margin: 0; max-width: 590px; font-size: 24px; line-height: 1.3; font-weight: 400; color: rgb(23, 23, 23); text-wrap: balance; }
+  .intro h1 a { text-decoration: none; color: inherit; }
+  .intro h1 a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .intro h1 a.muted { color: rgb(98, 103, 111); }
+  .links { display: none; margin: -12px 0 0; gap: 10px; color: rgb(98, 103, 111); line-height: 1.6; }
+  .links a { color: inherit; text-decoration: none; }
+  .see-work { position: absolute; left: 50%; bottom: 0; translate: -50% 0; font-size: 14px; color: rgb(46, 46, 46); text-decoration: none; }
+  .grid-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+  .work { scroll-margin-top: 80px; padding-top: 16px; }
+  .contact { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: calc(96px * var(--s)) 0 0; }
+  .contact .emoji { margin: 0; font-size: 28px; line-height: 1.3; }
+  .contact h2 { margin: 0; font-size: 24px; font-weight: 500; line-height: 1.3; color: rgb(23, 23, 23); }
+  .contact .sub { margin: 0; color: rgb(128, 128, 128); }
+  .cal { width: 100%; min-height: 500px; margin-top: 32px; border-radius: 26px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .cal-fallback { color: rgb(46, 46, 46); }
+  @media (max-width: 809.98px) {
+    .wordmark { display: none; }
+    .grid-cards { grid-template-columns: 1fr; gap: 24px; }
+    .intro h1 { font-size: 24px; }
+    .links { display: flex; }
+    .see-work { display: none; }
+  }
+</style>

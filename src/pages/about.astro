@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import aboutRaw from '../../raw/about.html?raw';
+import { transform } from '../lib/transform';
+import { site } from '../data/projects';
+
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  url: `${site.url}/about`,
+  name: 'About • Nathalia Garcia',
+  mainEntity: { '@id': `${site.url}/#person` },
+}];
+---
+<Base title="About" description="Nathalia Garcia is a Brazilian Product Designer with 10+ years of experience in B2B and B2B2C, from SaaS and BI tools to AI-powered features. Based in São Paulo."
+  image="VADMgL6TToEMrbOoqLbcalVBQ.png" schema={schema}>
+  <main id="content" class="case" set:html={transform(aboutRaw)} />
+</Base>
+
+<style is:global>
+  .about-copy a { color: rgb(23, 23, 23); }
+</style>

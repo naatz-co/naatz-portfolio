@@ -1,0 +1,193 @@
+---
+import '@fontsource-variable/inter/opsz.css';
+import '../styles/global.css';
+import { site } from '../data/projects';
+import { imgAttrs } from '../lib/transform';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string; // file name in public/images (original format)
+  imageAlt?: string;
+  bg?: string;
+  theme?: 'light' | 'dark';
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+  type?: 'website' | 'article';
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  image = site.socialImage,
+  imageAlt = 'Nathalia Garcia – Product Designer',
+  bg = '#fff',
+  theme = 'light',
+  schema = [],
+  noindex = false,
+  type = 'website',
+  bodyClass = '',
+} = Astro.props;
+
+const fullTitle = title ? `${title} • ${site.name}` : site.title;
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+const canonical = `${site.url}${path === '/index' ? '' : path}`;
+const ogImage = `${site.url}/images/${image}`;
+const ogMeta = imgAttrs(image);
+const current = (href: string) => (path === href ? 'page' : undefined);
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${site.url}/#person`,
+  name: 'Nathalia Garcia',
+  alternateName: 'naatz',
+  jobTitle: 'Product Designer',
+  url: site.url,
+  image: `${site.url}/images/MuDd075zDwLUPaO38aI0fSKw6g.webp`,
+  sameAs: [site.linkedin, 'https://www.instagram.com/remont.ux'],
+  address: { '@type': 'PostalAddress', addressLocality: 'São Paulo', addressCountry: 'BR' },
+  knowsAbout: ['Product Design', 'UX Design', 'UI Design', 'Motion Design', 'Growth', 'SEO', 'Branding'],
+};
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${site.url}/#website`,
+  url: site.url,
+  name: 'naatz – Nathalia Garcia',
+  inLanguage: 'en',
+  publisher: { '@id': `${site.url}/#person` },
+};
+const graph = [person, website, ...schema];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="author" content="Nathalia Garcia" />
+    <meta name="theme-color" content={bg} />
+
+    <link rel="icon" type="image/png" href="/images/8KNtFvAE2KUSBYdS1cNZMu1xDI.png" />
+    <link rel="apple-touch-icon" href="/images/8KNtFvAE2KUSBYdS1cNZMu1xDI.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="naatz – Nathalia Garcia" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={imageAlt} />
+    {ogMeta.width && <meta property="og:image:width" content={String(Math.min(ogMeta.width, 1200))} />}
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://player.vimeo.com" crossorigin />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(graph)} />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+
+    <!-- Google Analytics (same property used on Framer) -->
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga}`}></script>
+    <script is:inline define:vars={{ ga: site.ga }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', ga);
+    </script>
+    <script is:inline defer src="https://cdn.visitors.now/v.js" data-token="e81079eb-9346-4434-b8a1-68f05fce743e"></script>
+  </head>
+  <body class={`${theme} ${bodyClass}`.trim()} style={`--bg:${bg}`}>
+    <a class="skip" href="#content">Skip to content</a>
+    <header class="site-header">
+      <div class="inner">
+        <a class="logo" href="/" aria-label="naatz – home">
+          <img src="/images/dVPLBFaNnDO7guQyd0rzMKlg64.svg" alt="naatz." width="71" height="18" />
+        </a>
+        <nav class="nav" aria-label="Main">
+          <a href="/about" aria-current={current('/about')}>About</a>
+          <a href="/#work">Work</a>
+          <a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a>
+        </nav>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer class="site-footer">
+      <span>© {new Date().getFullYear()} – Nathalia Garcia</span>
+      <span><a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a> · <a href="/about">About</a></span>
+    </footer>
+
+    <script>
+      // Header background once the page scrolls
+      const header = document.querySelector('.site-header');
+      const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+      addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // Reveal on scroll
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      // Slides (prev/next + optional autoplay)
+      document.querySelectorAll<HTMLElement>('.slides').forEach((root) => {
+        const track = root.querySelector<HTMLElement>('.slides-track')!;
+        const step = () => (track.firstElementChild as HTMLElement).offsetWidth + 16;
+        const go = (dir: number) => {
+          const max = track.scrollWidth - track.clientWidth - 2;
+          if (dir > 0 && track.scrollLeft >= max) track.scrollTo({ left: 0, behavior: 'smooth' });
+          else if (dir < 0 && track.scrollLeft <= 2) track.scrollTo({ left: max, behavior: 'smooth' });
+          else track.scrollBy({ left: dir * step(), behavior: 'smooth' });
+        };
+        root.querySelector('.slides-prev')?.addEventListener('click', () => go(-1));
+        root.querySelector('.slides-next')?.addEventListener('click', () => go(1));
+        const ms = Number(root.dataset.autoplay);
+        if (ms && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          let t = setInterval(() => go(1), ms);
+          root.addEventListener('pointerenter', () => clearInterval(t));
+          root.addEventListener('pointerleave', () => (t = setInterval(() => go(1), ms)));
+        }
+      });
+
+      // Tabs
+      document.querySelectorAll<HTMLElement>('.tabs').forEach((root) => {
+        const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+        const select = (tab: HTMLButtonElement) => {
+          for (const t of tabs) {
+            const on = t === tab;
+            t.setAttribute('aria-selected', String(on));
+            t.tabIndex = on ? 0 : -1;
+            root.querySelector<HTMLElement>('#' + t.getAttribute('aria-controls'))!.hidden = !on;
+          }
+        };
+        tabs.forEach((t, i) => {
+          t.addEventListener('click', () => select(t));
+          t.addEventListener('keydown', (e) => {
+            const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+            if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; select(n); n.focus(); }
+          });
+        });
+      });
+
+      // Play muted loop videos only while visible
+      const vio = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+        }
+      }, { rootMargin: '200px' });
+      document.querySelectorAll('video.vid').forEach((v) => vio.observe(v));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+name: Fetch images & videos
+
+# Downloads every image/video the site references (from Framer's CDN, one time only),
+# optimizes them to WebP and commits them to the repo. Runs automatically when the
+# page content changes, or manually from the Actions tab.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'raw/**'
+      - 'src/**'
+      - 'scripts/fetch-assets.mjs'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/fetch-assets.mjs
+      - name: Commit new assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add public/images public/videos src/data/images.json
+          if git diff --cached --quiet; then echo "Nothing new"; exit 0; fi
+          git commit -m "chore: download and optimize site assets"
+          git push
