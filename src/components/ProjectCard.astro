@@ -35,5 +35,14 @@ const H = headingLevel;
   .card-title { margin: 0; font-size: 16px; font-weight: 400; color: rgb(23, 23, 23); }
   .card-sub { margin: 0; color: rgb(128, 128, 128); transition: color .55s var(--hover); }
   .card:hover .card-sub, .card:focus-visible .card-sub { color: rgb(23, 23, 23); }
+  .card { transition: background-color .35s var(--hover), border-color .35s var(--hover); }
+  .card:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  /* dark case pages (ocalendar, James): card a step lighter than the page */
+  :global(body.dark) .card { background: rgb(32, 32, 32); border-color: rgba(255, 255, 255, .08); }
+  :global(body.dark) .card:hover, :global(body.dark) .card:focus-visible { background: rgb(38, 38, 38); border-color: rgba(255, 255, 255, .16); }
+  :global(body.dark) .card-media { background: rgb(44, 44, 44); }
+  :global(body.dark) .card-title { color: rgb(242, 242, 242); }
+  :global(body.dark) .card-sub { color: rgb(150, 150, 150); }
+  :global(body.dark) .card:hover .card-sub, :global(body.dark) .card:focus-visible .card-sub { color: rgb(242, 242, 242); }
   @media (prefers-reduced-motion: reduce) { .card-media img, .card-sub { transition: none; } }
 </style>
