@@ -16,8 +16,8 @@ const links = isHome
     ]
   : [
       { label: 'About', href: '/about', cls: 'l-about' },
-      { label: 'Linkedin', href: site.linkedin, cls: 'l-li', ext: true },
       { label: 'Work', href: '/#work', cls: 'l-work' },
+      { label: 'Linkedin', href: site.linkedin, cls: 'l-li', ext: true },
     ];
 ---
 <header class:list={['nv', isHome ? 'nv-home entry' : 'nv-case']} data-nav>
@@ -38,8 +38,8 @@ const links = isHome
   </div>
   <nav id="nv-menu" class="nv-menu" aria-label="Mobile">
     <a href="/about">About</a>
-    <a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a>
     <a href="/#work">Work</a>
+    <a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a>
   </nav>
 </header>
 
