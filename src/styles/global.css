@@ -65,7 +65,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-body.dark { color: var(--c-white); }
+body.dark { color: var(--c-white); --c-gray: rgb(150, 150, 150); --c-text-muted: rgb(160, 164, 171); } /* lighter grays keep AA contrast on dark pages */
 img, video, svg { max-width: 100%; }
 a { color: inherit; }
 ::selection { background: color-mix(in srgb, var(--c-accent) 18%, transparent); }
@@ -215,6 +215,8 @@ body.dark .crumbs [aria-current] { color: var(--c-white); }
   .js figure.img[data-a] img { transition: transform .8s var(--ease-f); }
   .js figure.img[data-a]:not(.in) img { transform: scale(1.1); }
   .js [data-a].in { will-change: auto; }
+  /* visible from the first frame (counts for LCP), only the image eases from 110% to 100% */
+  .js [data-a="zoom"] { opacity: 1; transform: none; }
 }
 
 /* ocalendar: auto-advancing feature list (Metabase-style) */

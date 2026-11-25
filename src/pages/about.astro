@@ -18,7 +18,7 @@ const schema = [{
 
     <section class="ab2-hero" aria-labelledby="ab2-title">
       <div class="ab2-who" data-a="mount">
-        <img src={avatar.src} width="56" height="56" alt="" />
+        <img src={avatar.src} srcset={avatar.srcset} sizes="56px" width="56" height="56" alt="" />
         <p><strong>Nathalia Garcia</strong><span>Product Designer · São Paulo, Brazil</span></p>
       </div>
       <h1 id="ab2-title" data-a="mount">I'm a Product Designer with 10+ years of experience in B2B and B2B2C.</h1>
@@ -26,8 +26,8 @@ const schema = [{
     </section>
 
     <div class="ab2-grid">
-      <figure class="ab2-photo" data-a="fade">
-        <img src="/images/MuDd075zDwLUPaO38aI0fSKw6g.webp" srcset={srcsetFor('/images/MuDd075zDwLUPaO38aI0fSKw6g.webp')} sizes="(max-width: 809px) 360px, 520px" width="1079" height="1260" alt="Portrait of Nathalia Garcia" fetchpriority="high" decoding="async" />
+      <figure class="ab2-photo">
+        <img src="/images/MuDd075zDwLUPaO38aI0fSKw6g.webp" srcset={srcsetFor('/images/MuDd075zDwLUPaO38aI0fSKw6g.webp')} sizes="(max-width: 809px) calc(100vw - 40px), 520px" width="1079" height="1260" alt="Portrait of Nathalia Garcia" fetchpriority="high" decoding="async" />
       </figure>
 
       <div class="ab2-chapters">

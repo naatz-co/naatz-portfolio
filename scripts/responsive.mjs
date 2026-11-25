@@ -5,7 +5,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
-export const WIDTHS = [640, 1080, 1600];
+export const WIDTHS = [240, 640, 1080, 1600];
 const DIR = 'public/images';
 const MANIFEST = 'src/data/variants.json';
 

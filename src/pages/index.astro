@@ -25,7 +25,7 @@ const schema = [
   <main id="content" class="home">
     <section class="intro" aria-labelledby="intro-title">
       <a href="/about" class="avatar" aria-label="About Nathalia" data-a="fade">
-        <img src={avatar.src} width="96" height="96" alt="Portrait of Nathalia Garcia" fetchpriority="high" />
+        <img src={avatar.src} srcset={avatar.srcset} sizes="96px" width="96" height="96" alt="Portrait of Nathalia Garcia" fetchpriority="high" />
       </a>
       <h1 id="intro-title" data-a="mount">
         <span class="sr-only">Nathalia Garcia, </span>Product designer currently working at
