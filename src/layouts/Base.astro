@@ -124,9 +124,40 @@ const graph = [person, website, ...schema];
         for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       }, { threshold: 0 });
       document.querySelectorAll('[data-a]').forEach((el) => {
-        if (el.closest('.slides, .tabs')) return el.classList.add('in');
+        if (el.closest('.slides, .tabs, .feat')) return el.classList.add('in');
         if ((el as HTMLElement).dataset.a === 'mount') return requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
         io.observe(el);
+      });
+
+      // Auto-advancing feature list (ocalendar categories)
+      document.querySelectorAll<HTMLElement>('.feat').forEach((root) => {
+        const items = [...root.querySelectorAll<HTMLElement>('.feat-item')];
+        const imgs = [...root.querySelectorAll<HTMLElement>('.feat-img')];
+        const auto = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.style.setProperty('--t', `${Number(root.dataset.interval || 6000) / 1000}s`);
+        let cur = 0;
+        const select = (i: number) => {
+          cur = (i + items.length) % items.length;
+          items.forEach((it, k) => {
+            it.classList.toggle('on', k === cur);
+            it.querySelector('button')!.setAttribute('aria-expanded', String(k === cur));
+            const bar = it.querySelector<HTMLElement>('.feat-bar i');
+            if (bar) { bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = ''; }
+          });
+          imgs.forEach((im, k) => im.classList.toggle('on', k === cur));
+        };
+        items.forEach((it, k) => {
+          it.querySelector('button')!.addEventListener('click', () => select(k));
+          it.querySelector('.feat-bar i')?.addEventListener('animationend', () => { if (k === cur) select(cur + 1); });
+        });
+        if (!auto) return;
+        let hover = false, seen = false;
+        const sync = () => root.classList.toggle('paused', hover || !seen);
+        root.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { hover = true; sync(); } });
+        root.addEventListener('pointerleave', () => { hover = false; sync(); });
+        new IntersectionObserver(([e]) => { seen = e.isIntersecting; sync(); }, { threshold: 0.35 }).observe(root);
+        sync();
+        root.classList.add('run');
       });
 
       // Slides (prev/next, pagination dots, optional autoplay loop)
