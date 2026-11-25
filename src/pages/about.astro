@@ -21,10 +21,8 @@ const schema = [{
         <img src={avatar.src} width="56" height="56" alt="" />
         <p><strong>Nathalia Garcia</strong><span>Product Designer · São Paulo, Brazil</span></p>
       </div>
-      <h1 id="ab2-title" data-a="mount">
-        I'm a Product Designer with 10+ years of experience in B2B and B2B2C.
-        <span>Over the years, I've had the privilege of designing products across various industries, including Healthcare, Real estate, Business intelligence, and Entertainment, crafting solutions like SaaS platforms, BI tools, Productivity apps and AI-powered features.</span>
-      </h1>
+      <h1 id="ab2-title" data-a="mount">I'm a Product Designer with 10+ years of experience in B2B and B2B2C.</h1>
+      <p class="ab2-lede" data-a="mount">Over the years, I've had the privilege of designing products across various industries, including Healthcare, Real estate, Business intelligence, and Entertainment, crafting solutions like SaaS platforms, BI tools, Productivity apps and AI-powered features.</p>
     </section>
 
     <div class="ab2-grid">
@@ -74,15 +72,14 @@ const schema = [{
   .ab2-who strong { font-weight: 500; }
   .ab2-who span { color: var(--c-gray); }
 
-  /* sized to the content width so the intro never runs past 4 lines */
-  .ab2-hero h1 { margin: 40px 0 0; font-size: min(35px, calc((100vw - 2 * var(--page-pad)) / 36)); line-height: 1.3; letter-spacing: -1px; font-weight: 500; text-wrap: pretty; }
-  .ab2-hero h1 span { color: var(--c-gray); }
+  .ab2-hero h1 { margin: 40px 0 0; max-width: 980px; font-size: 40px; line-height: 1.2; letter-spacing: -1px; font-weight: 500; text-wrap: balance; }
+  .ab2-lede { margin: 24px 0 0; max-width: 720px; font-size: 20px; line-height: 1.6; color: var(--c-text-muted); text-wrap: pretty; }
 
   .ab2-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 80px; margin-top: 200px; }
   .ab2-photo { margin: 0; position: sticky; top: 104px; align-self: start; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 5; background: var(--c-line-soft); }
   .ab2-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
 
-  .ab2-chapters { display: flex; flex-direction: column; gap: 96px; max-width: 680px; }
+  .ab2-chapters { display: flex; flex-direction: column; gap: 160px; max-width: 680px; }
   .ab2-ch h2 { margin: 0 0 24px; display: flex; align-items: baseline; gap: 16px; font-size: 24px; line-height: 1.3; letter-spacing: -.4px; font-weight: 500; }
   .ab2-ch h2 span { font-size: 14px; letter-spacing: 0; color: var(--c-gray); font-variant-numeric: tabular-nums; }
   .ab2-ch p { margin: 0; font-size: 18px; line-height: 1.7; color: var(--c-text-muted); text-wrap: pretty; }
@@ -105,7 +102,7 @@ const schema = [{
     .ab2-chapters { gap: 72px; }
   }
   @media (max-width: 809.98px) {
-    .ab2-hero h1 { font-size: 24px; letter-spacing: -.3px; } .ab2-end h2 { font-size: 28px; }
+    .ab2-hero h1 { font-size: 28px; letter-spacing: -.5px; } .ab2-lede { font-size: 17px; margin-top: 16px; } .ab2-end h2 { font-size: 28px; }
     .ab2-hero h1 { margin-top: 28px; }
     .ab2-grid { grid-template-columns: minmax(0, 1fr); margin-top: 56px; }
     .ab2-photo { position: static; max-width: 360px; }
