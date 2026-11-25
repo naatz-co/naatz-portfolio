@@ -1,0 +1,158 @@
+---
+// Recreates Framer's "Animated Navigation" (home) and the case-study navigation.
+// Home: fixed header. At the top ("Desktop Entry") the naatz. logo is giant and the links are spread
+// (About / Nathalia Garcia — Work — Linkedin). After 58px of scroll it springs into "Desktop Default":
+// small logo on the left, links grouped on the right. Only transform/opacity/color animate (GPU, no layout).
+// Mobile (< 810px): logo + burger that opens a menu, like Framer's "Mobile Closed" / "Mobile" variants.
+import { site } from '../data/projects';
+interface Props { variant?: 'home' | 'case'; current?: string }
+const { variant = 'case', current } = Astro.props;
+const isHome = variant === 'home';
+const links = isHome
+  ? [
+      { label: 'About', href: '/about', cls: 'l-about' },
+      { label: 'Work', href: '/#work', cls: 'l-work' },
+      { label: 'Linkedin', href: site.linkedin, cls: 'l-li', ext: true },
+    ]
+  : [
+      { label: 'About', href: '/about', cls: 'l-about' },
+      { label: 'Linkedin', href: site.linkedin, cls: 'l-li', ext: true },
+      { label: 'Work', href: '/#work', cls: 'l-work' },
+    ];
+---
+<header class:list={['nv', isHome ? 'nv-home entry' : 'nv-case']} data-nav>
+  <div class="nv-bar">
+    <a class="nv-logo" href="/" aria-label="naatz – home">
+      <img src="/images/dVPLBFaNnDO7guQyd0rzMKlg64.svg" alt="naatz." width="1416" height="362" fetchpriority="high" decoding="async" />
+    </a>
+    {isHome && <span class="nv-name" aria-hidden="true">Nathalia Garcia</span>}
+    <nav class="nv-links" aria-label="Main">
+      {links.map((l) => (
+        <a class={l.cls} href={l.href} aria-current={current === l.href ? 'page' : undefined}
+          target={l.ext ? '_blank' : undefined} rel={l.ext ? 'noopener' : undefined}>{l.label}</a>
+      ))}
+    </nav>
+    <button class="nv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nv-menu">
+      <span></span><span></span>
+    </button>
+  </div>
+  <nav id="nv-menu" class="nv-menu" aria-label="Mobile">
+    <a href="/about">About</a>
+    <a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a>
+    <a href="/#work">Work</a>
+  </nav>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+  const burger = nav.querySelector<HTMLButtonElement>('.nv-burger')!;
+  burger.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('.nv-menu a').forEach((a) => a.addEventListener('click', () => {
+    nav.classList.remove('open'); burger.setAttribute('aria-expanded', 'false');
+  }));
+
+  if (nav.classList.contains('nv-home')) {
+    const bar = nav.querySelector<HTMLElement>('.nv-bar')!;
+    const links = nav.querySelector<HTMLElement>('.nv-links')!;
+    const about = nav.querySelector<HTMLElement>('.l-about')!;
+    const work = nav.querySelector<HTMLElement>('.l-work')!;
+    const TRIGGER = 58; // Framer: "Navigation Trigger" frame reaching the top of the viewport
+    const desktop = matchMedia('(min-width: 810px)');
+
+    // Entry offsets are measured from the compact (natural) layout, so the animation is a pure transform.
+    const measure = () => {
+      const vw = document.documentElement.clientWidth;
+      const left = (el: HTMLElement) => links.offsetLeft + el.offsetLeft;
+      bar.style.setProperty('--logo-scale', String(71 / vw));
+      bar.style.setProperty('--about-x', `${20 - left(about)}px`);
+      bar.style.setProperty('--work-x', `${(vw - work.offsetWidth) / 2 - left(work)}px`);
+    };
+    let compact: boolean | null = null;
+    const update = () => {
+      const next = !desktop.matches || scrollY >= TRIGGER;
+      if (next === compact) return;
+      compact = next;
+      nav.classList.toggle('entry', !next);
+      document.documentElement.classList.toggle('nav-compact', next);
+    };
+    measure();
+    nav.classList.add('no-t');
+    update();
+    requestAnimationFrame(() => requestAnimationFrame(() => nav.classList.remove('no-t')));
+    let ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { update(); ticking = false; });
+    }, { passive: true });
+    addEventListener('resize', () => { measure(); compact = null; update(); }, { passive: true });
+    desktop.addEventListener('change', () => { compact = null; update(); });
+  } else {
+    requestAnimationFrame(() => nav.classList.add('in'));
+  }
+</script>
+
+<style>
+  /* Framer springs: 0.65s, bounce 0 (critically damped) */
+  .nv { --spring: cubic-bezier(.2, .8, .2, 1); --dur: .65s; position: relative; z-index: 50; font-weight: 500; }
+  @supports (transition-timing-function: linear(0, 1)) {
+    .nv { --spring: linear(0, .0388 4.2%, .1274 8.3%, .2367 12.5%, .3494 16.7%, .456 20.8%, .5519 25%, .6352 29.2%, .7058 33.3%, .7646 37.5%, .813 41.7%, .8522 45.8%, .8838 50%, .909 54.2%, .9291 58.3%, .9449 62.5%, .9573 66.7%, .967 70.8%, .9745 75%, .9804 79.2%, .985 83.3%, .9885 87.5%, .9912 91.7%, .9933 95.8%, 1); }
+  }
+  .nv a { text-decoration: none; }
+  .nv-links a { color: rgb(128, 128, 128); transition: color .2s; }
+  .nv-links a:hover, .nv-links a[aria-current] { color: rgb(23, 23, 23); }
+  :global(body.dark) .nv-links a:hover, :global(body.dark) .nv-links a[aria-current] { color: #fff; }
+  :global(body.dark) .nv-logo img { filter: invert(1); }
+  .nv-burger, .nv-menu { display: none; }
+
+  /* ---------- Home (fixed, animated) ---------- */
+  .nv-home { position: fixed; top: 0; left: 0; right: 0; height: 60px; pointer-events: none; }
+  .nv-home .nv-bar { position: relative; height: 60px; }
+  .nv-home .nv-bar > * { pointer-events: auto; }
+  .nv-home .nv-logo { position: absolute; left: 20px; top: 70px; width: calc(100vw - 20px); transform-origin: 0 0;
+    transform: translateY(-49px) scale(var(--logo-scale, .05)); transition: transform var(--dur) var(--spring); }
+  .nv-home .nv-logo img { display: block; width: 100vw; height: auto; }
+  .nv-home.entry .nv-logo { transform: none; }
+  .nv-home .nv-links { position: absolute; right: 20px; top: 20px; display: flex; gap: 28px; }
+  .nv-home .nv-links a { display: inline-block; transition: transform var(--dur) var(--spring), color var(--dur) var(--spring); }
+  .nv-home.entry .l-about { transform: translate(var(--about-x, 0), -12px); color: rgb(46, 46, 46); }
+  .nv-home.entry .l-work { transform: translateX(var(--work-x, 0)); }
+  .nv-name { position: absolute; left: 20px; top: 32px; color: rgb(23, 23, 23); opacity: 0; transform: translateY(-8px); transition: opacity .4s ease, transform var(--dur) var(--spring); pointer-events: none !important; }
+  .nv-home.entry .nv-name { opacity: 1; transform: none; }
+  .nv-home.no-t *, .nv-home.no-t { transition: none !important; }
+
+  /* ---------- Case pages (in flow, fades down on load) ---------- */
+  .nv-case .nv-bar { max-width: 1400px; height: 80px; margin: 0 auto; padding: 0 76px; display: flex; align-items: center; justify-content: space-between;
+    opacity: 0; transform: translateY(-20px); transition: opacity .8s cubic-bezier(.44, 0, .56, 1) .5s, transform .8s cubic-bezier(.44, 0, .56, 1) .5s; }
+  :global(html:not(.js)) .nv-case .nv-bar, .nv-case.in .nv-bar { opacity: 1; transform: none; }
+  .nv-case .nv-logo img { display: block; width: 70.5px; height: auto; }
+  .nv-case .nv-links { display: flex; gap: 16px; }
+  @media (max-width: 1099.98px) { .nv-case .nv-bar { padding: 0 40px; } }
+
+  /* ---------- Mobile: logo + burger + menu ---------- */
+  @media (max-width: 809.98px) {
+    .nv-home { height: auto; }
+    .nv-home .nv-bar, .nv-case .nv-bar { height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+    .nv-home .nv-logo { position: static; width: auto; transform: none !important; transition: none; }
+    .nv-home .nv-logo img, .nv-case .nv-logo img { width: 78px; }
+    .nv-links, .nv-name { display: none !important; }
+    .nv-burger { display: block; position: relative; width: 24px; height: 24px; padding: 0; border: 0; background: none; cursor: pointer; }
+    .nv-burger span { position: absolute; left: 5px; width: 14px; height: 1.5px; background: rgb(23, 23, 23); transition: transform var(--dur) var(--spring), top var(--dur) var(--spring); }
+    :global(body.dark) .nv-burger span { background: #fff; }
+    .nv-burger span:first-child { top: 8px; }
+    .nv-burger span:last-child { top: 14.5px; }
+    .nv.open .nv-burger span:first-child { top: 11.25px; transform: rotate(45deg); }
+    .nv.open .nv-burger span:last-child { top: 11.25px; transform: rotate(-45deg); }
+    .nv-menu { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 20px 20px 26px; background: var(--bg, #fff);
+      position: absolute; left: 0; right: 0; top: 60px; pointer-events: auto;
+      opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .3s ease, transform var(--dur) var(--spring), visibility 0s .3s; }
+    .nv.open .nv-menu { opacity: 1; visibility: visible; transform: none; transition: opacity .3s ease, transform var(--dur) var(--spring); }
+    .nv-menu a { color: rgb(128, 128, 128); }
+    .nv.open { background: var(--bg, #fff); }
+  }
+  @media (prefers-reduced-motion: reduce) { .nv *, .nv .nv-bar { transition: none !important; } }
+</style>

@@ -41,6 +41,17 @@ function fixSpacing(html: string) {
   return html.replace(/(padding|gap):([^;"]+)/g, (_m, prop: string, val: string) => `${prop}:${scalePx(val)}`);
 }
 
+// Framer appear effects on case pages: text/sections rise 50px + fade (0.8s), images also zoom 1.1 -> 1.
+function addMotion(html: string) {
+  return html
+    .replace(/<div class="t( |")/g, '<div data-a="up" class="t$1')
+    .replace(/<figure class="img/g, '<figure data-a="up" class="img')
+    .replace(/<div class="(video|tk|slides[^"]*)"/g, '<div data-a="up" class="$1"')
+    .replace(/<video class="vid"/g, '<video data-a="up" class="vid"')
+    .replace(/<div class="col stat"/g, '<div data-a="up" class="col stat"')
+    .replace(/<div class="tabs">/g, '<div data-a="up" class="tabs" style="--d:.6s">');
+}
+
 export function transform(html: string) {
-  return fixSpacing(fixHeadings(fixImages(html)));
+  return addMotion(fixSpacing(fixHeadings(fixImages(html))));
 }

@@ -34,24 +34,9 @@ a { color: inherit; }
 .skip { position: absolute; left: -9999px; top: 8px; z-index: 100; background: #000; color: #fff; padding: 8px 12px; border-radius: 8px; }
 .skip:focus { left: 8px; }
 
-/* ---------- Header ---------- */
-.site-header { position: sticky; top: 0; z-index: 50; transition: background .3s, backdrop-filter .3s, transform .35s; }
-.site-header.scrolled { background: color-mix(in srgb, var(--bg, #fff) 82%, transparent); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); }
-.site-header .inner { max-width: var(--max); margin: 0 auto; height: 72px; padding: 0 var(--page-pad); display: flex; align-items: center; justify-content: space-between; }
-.logo { display: block; line-height: 0; }
-.logo img { width: 70.5px; height: auto; }
-body.dark .logo img, body.dark .wordmark img { filter: invert(1); }
-.nav { display: flex; gap: 48px; font-weight: 500; }
-.nav a { text-decoration: none; color: var(--gray); transition: color .2s; }
-.nav a:hover, .nav a[aria-current="page"] { color: var(--ink); }
-body.dark .nav a:hover, body.dark .nav a[aria-current="page"] { color: #fff; }
-@media (max-width: 767.98px) { .nav { gap: 24px; font-size: 15px; } }
-
-/* ---------- Footer ---------- */
-.site-footer { max-width: var(--max); margin: 0 auto; padding: 40px var(--page-pad) 48px; font-size: 14px; color: var(--gray); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.site-footer a { color: inherit; text-decoration: none; }
-.site-footer a:hover { color: var(--ink); }
-body.dark .site-footer a:hover { color: #fff; }
+/* ---------- Footer (Framer: "© 2026 – Nathalia Garcia", Body Small, gray) ---------- */
+.site-footer { max-width: var(--max); margin: 0 auto; padding: 80px var(--page-pad) 40px; }
+.site-footer p { margin: 0; font-size: 14px; line-height: 1.4; color: var(--gray); }
 
 /* ---------- Framer layout primitives ---------- */
 main.case { max-width: var(--max); margin: 0 auto; }
@@ -175,8 +160,21 @@ body.dark .crumbs [aria-current] { color: #fff; }
 .tabs-panel figure { border-radius: 24px; }
 @media (max-width: 809.98px) { .tabs-panel { grid-template-columns: minmax(0, 1fr); } }
 
-/* reveal on scroll (mirrors Framer appear effects, respects reduced motion) */
+/* ---------- Appear effects (values copied from Framer) ----------
+   up:    opacity 0, y 50  -> 0.8s cubic-bezier(.44,0,.56,1)          (sections & text)
+   mount: same as "up", but runs on page load                          (hero copy)
+   zoom:  image scale 1.1 -> 1, 0.8s, same ease                        (case images)
+   card:  opacity 0, scale .95 -> 1s cubic-bezier(.19,0,.5,1), .2s delay (home cards)
+   fade:  opacity 0 -> spring .4s                                      (booking widget) */
+:root { --ease-f: cubic-bezier(.44, 0, .56, 1); }
 @media (prefers-reduced-motion: no-preference) {
-  .js .reveal { opacity: 0; transform: translateY(24px) scale(.98); transition: opacity 1s cubic-bezier(.19, 0, .5, 1), transform 1s cubic-bezier(.19, 0, .5, 1); }
-  .js .reveal.in { opacity: 1; transform: none; }
+  .js [data-a] { transition: opacity .8s var(--ease-f) var(--d, 0s), transform .8s var(--ease-f) var(--d, 0s); }
+  .js [data-a="up"]:not(.in), .js [data-a="mount"]:not(.in) { opacity: 0; transform: translateY(50px); }
+  .js [data-a="card"] { transition-duration: 1s; transition-timing-function: cubic-bezier(.19, 0, .5, 1); --d: .2s; }
+  .js [data-a="card"]:not(.in) { opacity: 0; transform: scale(.95); }
+  .js [data-a="fade"] { transition: opacity .4s cubic-bezier(.25, .8, .3, 1.05); }
+  .js [data-a="fade"]:not(.in) { opacity: 0; }
+  .js figure.img[data-a] img { transition: transform .8s var(--ease-f); }
+  .js figure.img[data-a]:not(.in) img { transform: scale(1.1); }
+  .js [data-a].in { will-change: auto; }
 }

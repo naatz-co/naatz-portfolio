@@ -3,6 +3,7 @@ import '@fontsource-variable/inter/opsz.css';
 import '../styles/global.css';
 import { site } from '../data/projects';
 import { imgAttrs } from '../lib/transform';
+import Header from '../components/Header.astro';
 
 interface Props {
   title?: string;
@@ -15,6 +16,7 @@ interface Props {
   noindex?: boolean;
   type?: 'website' | 'article';
   bodyClass?: string;
+  nav?: 'home' | 'case';
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   noindex = false,
   type = 'website',
   bodyClass = '',
+  nav = 'case',
 } = Astro.props;
 
 const fullTitle = title ? `${title} • ${site.name}` : site.title;
@@ -103,42 +106,28 @@ const graph = [person, website, ...schema];
       gtag('js', new Date());
       gtag('config', ga);
     </script>
-    <script is:inline defer src="https://cdn.visitors.now/v.js" data-token="e81079eb-9346-4434-b8a1-68f05fce743e"></script>
   </head>
   <body class={`${theme} ${bodyClass}`.trim()} style={`--bg:${bg}`}>
     <a class="skip" href="#content">Skip to content</a>
-    <header class="site-header">
-      <div class="inner">
-        <a class="logo" href="/" aria-label="naatz – home">
-          <img src="/images/dVPLBFaNnDO7guQyd0rzMKlg64.svg" alt="naatz." width="71" height="18" />
-        </a>
-        <nav class="nav" aria-label="Main">
-          <a href="/about" aria-current={current('/about')}>About</a>
-          <a href="/#work">Work</a>
-          <a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a>
-        </nav>
-      </div>
-    </header>
+    <Header variant={nav} current={path} />
 
     <slot />
 
     <footer class="site-footer">
-      <span>© {new Date().getFullYear()} – Nathalia Garcia</span>
-      <span><a href={site.linkedin} target="_blank" rel="noopener">Linkedin</a> · <a href="/about">About</a></span>
+      <p>© {new Date().getFullYear()} – Nathalia Garcia</p>
     </footer>
 
     <script>
-      // Header background once the page scrolls
-      const header = document.querySelector('.site-header');
-      const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
-      addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-
-      // Reveal on scroll
+      // Framer-style appear effects: [data-a] elements animate once when they enter the viewport.
+      // Content is fully visible without JS (the hidden state only applies under html.js), so SEO is unaffected.
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      }, { rootMargin: '0px 0px -8% 0px' });
-      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+      }, { threshold: 0 });
+      document.querySelectorAll('[data-a]').forEach((el) => {
+        if (el.closest('.slides, .tabs')) return el.classList.add('in');
+        if ((el as HTMLElement).dataset.a === 'mount') return requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+        io.observe(el);
+      });
 
       // Slides (prev/next + optional autoplay)
       document.querySelectorAll<HTMLElement>('.slides').forEach((root) => {
