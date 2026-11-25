@@ -8,7 +8,7 @@ export default defineConfig({
   compressHTML: true,
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/404'),
+      filter: (page) => !page.includes('/404') && !page.includes('/about-options'),
       serialize: (item) => ({ ...item, url: item.url.replace(/\/$/, '') || 'https://www.naatz.co' }),
     }),
   ],

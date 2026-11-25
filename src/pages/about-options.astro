@@ -1,0 +1,58 @@
+---
+// Review page (not indexed): three ways to present the About intro.
+import Base from '../layouts/Base.astro';
+import { imgAttrs } from '../lib/transform';
+const avatar = imgAttrs('e88cz1fhYhgRfwqC3kjjVoI1fkw.jpeg');
+const lead = "I'm a Product Designer with 10+ years of experience in B2B and B2B2C.";
+const rest = "Over the years, I've had the privilege of designing products across various industries, including Healthcare, Real estate, Business intelligence, and Entertainment, crafting solutions like SaaS platforms, BI tools, Productivity apps and AI-powered features.";
+const industries = ['Healthcare', 'Real estate', 'Business intelligence', 'Entertainment'];
+const products = ['SaaS platforms', 'BI tools', 'Productivity apps', 'AI-powered features'];
+---
+<Base title="About – options" description="About intro options" noindex>
+  <main class="opts">
+    <section class="opt">
+      <p class="tag">Opção A · título + parágrafo menor</p>
+      <div class="who"><img src={avatar.src} width="56" height="56" alt="" /><p><strong>Nathalia Garcia</strong><span>Product Designer · São Paulo, Brazil</span></p></div>
+      <h2 class="a-h">{lead}</h2>
+      <p class="a-p">{rest}</p>
+    </section>
+
+    <section class="opt">
+      <p class="tag">Opção B · duas colunas</p>
+      <div class="who"><img src={avatar.src} width="56" height="56" alt="" /><p><strong>Nathalia Garcia</strong><span>Product Designer · São Paulo, Brazil</span></p></div>
+      <div class="b-grid">
+        <h2 class="b-h">{lead}</h2>
+        <p class="b-p">{rest}</p>
+      </div>
+    </section>
+
+    <section class="opt">
+      <p class="tag">Opção C · título + listas (mesmas palavras, sem o parágrafo longo)</p>
+      <div class="who"><img src={avatar.src} width="56" height="56" alt="" /><p><strong>Nathalia Garcia</strong><span>Product Designer · São Paulo, Brazil</span></p></div>
+      <h2 class="a-h">{lead}</h2>
+      <dl class="c-lists">
+        <div><dt>Industries</dt><dd>{industries.join(' · ')}</dd></div>
+        <div><dt>Products</dt><dd>{products.join(' · ')}</dd></div>
+      </dl>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .opts { max-width: 1400px; margin: 0 auto; padding: 40px var(--page-pad) 80px; }
+  .opt { padding: 64px 0 96px; border-bottom: 1px dashed var(--c-line); }
+  .tag { margin: 0 0 40px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--c-accent); }
+  .who { display: flex; align-items: center; gap: 14px; }
+  .who img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+  .who p { margin: 0; display: flex; flex-direction: column; font-size: 16px; line-height: 1.35; }
+  .who strong { font-weight: 500; } .who span { color: var(--c-gray); }
+  .a-h { margin: 40px 0 0; max-width: 980px; font-size: 40px; line-height: 1.2; letter-spacing: -1px; font-weight: 500; text-wrap: balance; }
+  .a-p { margin: 24px 0 0; max-width: 720px; font-size: 20px; line-height: 1.6; color: var(--c-text-muted); text-wrap: pretty; }
+  .b-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 80px; align-items: end; margin-top: 40px; }
+  .b-h { margin: 0; font-size: 44px; line-height: 1.15; letter-spacing: -1.2px; font-weight: 500; text-wrap: balance; }
+  .b-p { margin: 0; font-size: 18px; line-height: 1.6; color: var(--c-text-muted); text-wrap: pretty; }
+  .c-lists { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; max-width: 980px; margin: 40px 0 0; padding-top: 24px; border-top: 1px solid var(--c-line); }
+  .c-lists dt { font-size: 14px; color: var(--c-gray); }
+  .c-lists dd { margin: 8px 0 0; font-size: 18px; line-height: 1.5; color: var(--c-ink); }
+  @media (max-width: 809.98px) { .b-grid, .c-lists { grid-template-columns: minmax(0, 1fr); gap: 20px; } .a-h, .b-h { font-size: 28px; } }
+</style>
