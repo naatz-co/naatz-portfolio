@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "assets": "node scripts/fetch-assets.mjs",
-    "build": "node scripts/fetch-assets.mjs --soft && astro build",
+    "build": "node scripts/fetch-assets.mjs --soft && astro build && node scripts/sitemap.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
