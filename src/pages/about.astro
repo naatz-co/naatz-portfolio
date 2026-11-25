@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../data/projects';
-import { imgAttrs } from '../lib/transform';
+import { imgAttrs, srcsetFor } from '../lib/transform';
 const avatar = imgAttrs('e88cz1fhYhgRfwqC3kjjVoI1fkw.jpeg');
 
 const schema = [{
@@ -27,7 +27,7 @@ const schema = [{
 
     <div class="ab2-grid">
       <figure class="ab2-photo" data-a="fade">
-        <img src="/images/MuDd075zDwLUPaO38aI0fSKw6g.webp" width="1079" height="1260" alt="Portrait of Nathalia Garcia" loading="lazy" decoding="async" />
+        <img src="/images/MuDd075zDwLUPaO38aI0fSKw6g.webp" srcset={srcsetFor('/images/MuDd075zDwLUPaO38aI0fSKw6g.webp')} sizes="(max-width: 809px) 360px, 520px" width="1079" height="1260" alt="Portrait of Nathalia Garcia" fetchpriority="high" decoding="async" />
       </figure>
 
       <div class="ab2-chapters">

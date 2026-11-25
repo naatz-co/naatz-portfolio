@@ -95,17 +95,23 @@ const graph = [person, website, ...schema];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <link rel="preconnect" href="https://player.vimeo.com" crossorigin />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(graph)} />
     <script is:inline>document.documentElement.classList.add('js')</script>
 
     <!-- Google Analytics (same property used on Framer) -->
-    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga}`}></script>
+    <!-- loaded after the page has finished loading, so it never delays the first paint -->
     <script is:inline define:vars={{ ga: site.ga }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', ga);
+      addEventListener('load', function () {
+        (window.requestIdleCallback || setTimeout)(function () {
+          var s = document.createElement('script'); s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga;
+          document.head.appendChild(s);
+        });
+      });
     </script>
   </head>
   <body class={`${theme} ${bodyClass}`.trim()} style={`--bg:${bg}`}>

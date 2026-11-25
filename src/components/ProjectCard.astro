@@ -11,9 +11,9 @@ const H = headingLevel;
 ---
 <a class="card" data-a="card" href={`/${p.slug}`}>
   <figure class="card-media">
-    <img src={img.src} width={img.width} height={img.height} alt={p.coverAlt}
+    <img src={img.src} srcset={img.srcset} width={img.width} height={img.height} alt={p.coverAlt}
       loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} decoding="async"
-      sizes="(max-width: 809px) 100vw, 50vw" />
+      sizes="(max-width: 809px) calc(100vw - 72px), 600px" />
   </figure>
   <div class="card-text">
     <H class="card-title">{p.title}</H>
