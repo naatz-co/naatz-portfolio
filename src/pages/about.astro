@@ -68,18 +68,22 @@ const facts = [
     <section class="ab-row" aria-labelledby="ab-outside">
       <h2 id="ab-outside" class="ab-label" data-a="up">Outside of work</h2>
       <div class="ab-body">
-        <div class="ab-side">
-          <a class="ab-card" href="https://ocalendar.io/events" target="_blank" rel="noopener" data-a="up">
-            <span class="ab-card-kicker">Side project</span>
-            <strong>ocalendar <span aria-hidden="true">↗</span></strong>
-            <span>Outside of my work, I'm building my first independent project with a partner. Our product, ocalendar, is a web app that gathers all city events in São Paulo into a user-friendly platform. Starting from scratch, we reached <b>10,000 organic visitors in the first 30 days</b> after our launch, and we've been experiencing a steady monthly increase in traffic ever since.</span>
-          </a>
-          <a class="ab-card" href="https://www.instagram.com/remont.ux" target="_blank" rel="noopener" data-a="up">
-            <span class="ab-card-kicker">Content</span>
-            <strong>Remont <span aria-hidden="true">↗</span></strong>
-            <span>I also talk about how old products influence our lives at Remont.</span>
-          </a>
-        </div>
+        <ul class="ab-list">
+          <li data-a="up">
+            <a href="https://ocalendar.io/events" target="_blank" rel="noopener">
+              <span class="ab-list-head"><span class="ab-list-kicker">Side project</span><strong>ocalendar <span class="ab-arrow" aria-hidden="true">↗</span></strong></span>
+              <span class="ab-list-text">Outside of my work, I'm building my first independent project with a partner. Our product, ocalendar, is a web app that gathers all city events in São Paulo into a user-friendly platform. Starting from scratch, we reached 10,000 organic visitors in the first 30 days after our launch, and we've been experiencing a steady monthly increase in traffic ever since.</span>
+              <span class="ab-list-stat" aria-hidden="true"><b>10k</b>organic visitors<br />in the first 30 days</span>
+            </a>
+          </li>
+          <li data-a="up">
+            <a href="https://www.instagram.com/remont.ux" target="_blank" rel="noopener">
+              <span class="ab-list-head"><span class="ab-list-kicker">Content</span><strong>Remont <span class="ab-arrow" aria-hidden="true">↗</span></strong></span>
+              <span class="ab-list-text">I also talk about how old products influence our lives at Remont.</span>
+              <span class="ab-list-stat" aria-hidden="true"></span>
+            </a>
+          </li>
+        </ul>
         <p data-a="up">I'm currently based in São Paulo, Brazil and when I'm not designing, you'll probably find me playing instruments, exploring new spots in the city, planning my next adventure, or writing ideas I hope to bring to life someday.</p>
       </div>
     </section>
@@ -137,17 +141,20 @@ const facts = [
   .ab-link { color: var(--ink); font-weight: 500; text-decoration: none; }
   .ab-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-  /* outside of work */
-  .ab-side { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 12px; }
-  .ab-card { display: flex; flex-direction: column; gap: 8px; padding: 24px; border-radius: 20px; background: #fff; border: 1px solid var(--line);
-    text-decoration: none; color: var(--mute); font-size: 16px; line-height: 1.55; transition: border-color .25s, transform .35s cubic-bezier(.19, 0, .5, 1); }
-  .ab-card:hover { border-color: rgba(0, 0, 0, .2); transform: translateY(-2px); }
-  .ab-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .ab-card b { font-weight: 500; color: var(--ink); }
-  .ab-card strong { font-size: 22px; font-weight: 500; color: var(--ink); letter-spacing: -.3px; }
-  .ab-card-kicker { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
-  .ab-stat { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
-  .ab-stat b { font-size: 20px; font-weight: 500; color: var(--ink); }
+  /* outside of work: editorial list */
+  .ab-list { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--line); }
+  .ab-list li { border-bottom: 1px solid var(--line); }
+  .ab-list a { display: grid; grid-template-columns: 160px minmax(0, 1fr) 150px; gap: 32px; align-items: start; padding: 28px 0; text-decoration: none; color: var(--mute); transition: padding .4s cubic-bezier(.19, 0, .5, 1); }
+  .ab-list a:hover { padding-left: 8px; }
+  .ab-list a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
+  .ab-list-head { display: flex; flex-direction: column; gap: 6px; }
+  .ab-list-kicker { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
+  .ab-list-head strong { font-size: 22px; line-height: 1.2; font-weight: 500; letter-spacing: -.3px; color: var(--ink); white-space: nowrap; }
+  .ab-arrow { display: inline-block; font-size: .8em; transition: transform .35s cubic-bezier(.19, 0, .5, 1); }
+  .ab-list a:hover .ab-arrow { transform: translate(3px, -3px); }
+  .ab-list-text { font-size: 17px; line-height: 1.65; text-wrap: pretty; }
+  .ab-list-stat { font-size: 13px; line-height: 1.4; text-align: right; }
+  .ab-list-stat b { display: block; font-size: 40px; line-height: 1; letter-spacing: -1.5px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
 
   /* closing */
   .ab-end { padding: 120px 0 64px; text-align: center; }
@@ -163,6 +170,7 @@ const facts = [
     .ab-facts > div:nth-child(n + 3) { border-top: 1px solid var(--line); }
     .ab-row { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 72px 0; }
     .ab-label { position: static; }
+    .ab-list a { grid-template-columns: 140px minmax(0, 1fr) 120px; gap: 24px; }
     .ab-body .ab-big { font-size: 28px; }
   }
   @media (max-width: 809.98px) {
@@ -177,7 +185,9 @@ const facts = [
     .ab-body .ab-big { font-size: 24px; }
     .ab-body p { font-size: 16px; }
     .ab-body blockquote { font-size: 18px; padding-left: 16px; }
-    .ab-side { grid-template-columns: minmax(0, 1fr); }
+    .ab-list a { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 24px 0; }
+    .ab-list a:hover { padding-left: 0; }
+    .ab-list-stat { text-align: left; } .ab-list-stat:empty { display: none; }
     .ab-end { padding: 80px 0 40px; }
     .ab-end h2 { font-size: 30px; }
   }
