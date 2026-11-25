@@ -38,7 +38,7 @@ const images = new Set(KEEP_ORIGINAL);
 const videos = new Set();
 for (const f of files) {
   const txt = await readFile(f, 'utf8');
-  for (const m of txt.matchAll(/\b([A-Za-z0-9]{12,})\.(png|jpe?g|gif|svg|webp)\b/g)) images.add(`${m[1]}.${m[2]}`);
+  for (const m of txt.matchAll(/\b([A-Za-z0-9]{12,})\.(png|jpe?g|gif|svg)\b/g)) images.add(`${m[1]}.${m[2]}`);
   for (const m of txt.matchAll(/\b([A-Za-z0-9]{12,})\.(mp4|webm|mov)\b/g)) videos.add(`${m[1]}.${m[2]}`);
 }
 
