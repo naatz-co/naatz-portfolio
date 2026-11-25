@@ -207,7 +207,7 @@ body.dark .crumbs [aria-current] { color: #fff; }
 .feat-item.on button { padding-bottom: 16px; }
 .feat-item button:hover, .feat-item.on button { color: rgb(242, 249, 254); }
 .feat-item button:focus-visible { outline: 2px solid rgb(242, 249, 254); outline-offset: -4px; border-radius: 8px; }
-.feat-emoji { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, .2); box-shadow: 0 0 30px rgba(23, 23, 23, .6); opacity: .45; filter: grayscale(1); transition: opacity .35s, filter .35s; }
+.feat-emoji { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; opacity: .45; filter: grayscale(1); transition: opacity .35s, filter .35s; }
 .feat-emoji img { width: 28px; height: 28px; }
 .feat-item.on .feat-emoji, .feat-item button:hover .feat-emoji { opacity: 1; filter: none; }
 .feat-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.44, 0, .56, 1); }
