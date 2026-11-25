@@ -111,9 +111,9 @@ const links = isHome
     .nv { --spring: linear(0, .0388 4.2%, .1274 8.3%, .2367 12.5%, .3494 16.7%, .456 20.8%, .5519 25%, .6352 29.2%, .7058 33.3%, .7646 37.5%, .813 41.7%, .8522 45.8%, .8838 50%, .909 54.2%, .9291 58.3%, .9449 62.5%, .9573 66.7%, .967 70.8%, .9745 75%, .9804 79.2%, .985 83.3%, .9885 87.5%, .9912 91.7%, .9933 95.8%, 1); }
   }
   .nv a { text-decoration: none; }
-  .nv-links a { color: rgb(128, 128, 128); transition: color .2s; }
-  .nv-links a:hover, .nv-links a[aria-current] { color: rgb(23, 23, 23); }
-  :global(body.dark) .nv-links a:hover, :global(body.dark) .nv-links a[aria-current] { color: #fff; }
+  .nv-links a { color: var(--c-gray); transition: color .2s; }
+  .nv-links a:hover, .nv-links a[aria-current] { color: var(--c-ink); }
+  :global(body.dark) .nv-links a:hover, :global(body.dark) .nv-links a[aria-current] { color: var(--c-white); }
   :global(body.dark) .nv-logo img { filter: invert(1); }
   .nv-burger, .nv-menu { display: none; }
 
@@ -127,9 +127,9 @@ const links = isHome
   .nv-home.entry .nv-logo { transform: none; }
   .nv-home .nv-links { position: absolute; right: 20px; top: 20px; display: flex; gap: 28px; }
   .nv-home .nv-links a { display: inline-block; transition: transform var(--dur) var(--spring), color var(--dur) var(--spring); }
-  .nv-home.entry .l-about { transform: translate(var(--about-x, 0), -11px); color: rgb(46, 46, 46); }
+  .nv-home.entry .l-about { transform: translate(var(--about-x, 0), -11px); color: var(--c-ink-soft); }
   .nv-home.entry .l-work { transform: translateX(var(--work-x, 0)); }
-  .nv-name { position: absolute; left: 20px; top: 32px; color: rgb(23, 23, 23); opacity: 0; transform: translateY(-8px); transition: opacity .4s ease, transform var(--dur) var(--spring); pointer-events: none !important; }
+  .nv-name { position: absolute; left: 20px; top: 32px; color: var(--c-ink); opacity: 0; transform: translateY(-8px); transition: opacity .4s ease, transform var(--dur) var(--spring); pointer-events: none !important; }
   .nv-home.entry .nv-name { opacity: 1; transform: none; }
   .nv-home.no-t *, .nv-home.no-t { transition: none !important; }
 
@@ -139,8 +139,8 @@ const links = isHome
   :global(html:not(.js)) .nv-case .nv-bar, .nv-case.in .nv-bar { opacity: 1; transform: none; }
   .nv-case .nv-logo img { display: block; width: 70.5px; height: auto; }
   .nv-case { position: sticky; top: 0; transition: background-color .3s ease, box-shadow .3s ease; }
-  .nv-case.scrolled { background: color-mix(in srgb, var(--bg, #fff) 84%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(16px); backdrop-filter: saturate(1.4) blur(16px); box-shadow: 0 1px 0 rgba(0, 0, 0, .06); }
-  :global(body.dark) .nv-case.scrolled { box-shadow: 0 1px 0 rgba(255, 255, 255, .08); }
+  .nv-case.scrolled { background: color-mix(in srgb, var(--bg, var(--c-white)) 84%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(16px); backdrop-filter: saturate(1.4) blur(16px); box-shadow: 0 1px 0 var(--c-line-soft); }
+  :global(body.dark) .nv-case.scrolled { box-shadow: 0 1px 0 var(--c-line-on-dark-soft); }
   .nv-case .nv-links { display: flex; gap: 16px; }
   @media (max-width: 1099.98px) { .nv-case .nv-bar { padding: 0 40px; } }
   @media (min-width: 1100px) { :global(body.case-olos-automation) .nv-case .nv-bar { padding: 0 48px; } }
@@ -153,18 +153,18 @@ const links = isHome
     .nv-home .nv-logo img, .nv-case .nv-logo img { width: 78px; }
     .nv-links, .nv-name { display: none !important; }
     .nv-burger { display: block; position: relative; width: 24px; height: 24px; padding: 0; border: 0; background: none; cursor: pointer; }
-    .nv-burger span { position: absolute; left: 5px; width: 14px; height: 1.5px; background: rgb(23, 23, 23); transition: transform var(--dur) var(--spring), top var(--dur) var(--spring); }
-    :global(body.dark) .nv-burger span { background: #fff; }
+    .nv-burger span { position: absolute; left: 5px; width: 14px; height: 1.5px; background: var(--c-ink); transition: transform var(--dur) var(--spring), top var(--dur) var(--spring); }
+    :global(body.dark) .nv-burger span { background: var(--c-white); }
     .nv-burger span:first-child { top: 8px; }
     .nv-burger span:last-child { top: 14.5px; }
     .nv.open .nv-burger span:first-child { top: 11.25px; transform: rotate(45deg); }
     .nv.open .nv-burger span:last-child { top: 11.25px; transform: rotate(-45deg); }
-    .nv-menu { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 20px 20px 26px; background: var(--bg, #fff);
+    .nv-menu { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 20px 20px 26px; background: var(--bg, var(--c-white));
       position: absolute; left: 0; right: 0; top: 60px; pointer-events: auto;
       opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .3s ease, transform var(--dur) var(--spring), visibility 0s .3s; }
     .nv.open .nv-menu { opacity: 1; visibility: visible; transform: none; transition: opacity .3s ease, transform var(--dur) var(--spring); }
-    .nv-menu a { color: rgb(128, 128, 128); }
-    .nv.open { background: var(--bg, #fff); }
+    .nv-menu a { color: var(--c-gray); }
+    .nv.open { background: var(--bg, var(--c-white)); }
   }
   @media (prefers-reduced-motion: reduce) { .nv *, .nv .nv-bar { transition: none !important; } }
 </style>

@@ -66,7 +66,6 @@ function addMotion(html: string) {
     .replace(/<div class="(video|tk|slides[^"]*)"/g, '<div data-a="up" class="$1"')
     .replace(/<video class="vid/g, '<video data-a="up" class="vid')
     .replace(/<div class="col stat"/g, '<div data-a="up" class="col stat"')
-    .replace(/<div class="tabs">/g, '<div data-a="up" class="tabs" style="--d:.6s">');
 }
 
 export function transform(html: string) {

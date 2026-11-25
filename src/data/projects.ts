@@ -1,3 +1,12 @@
+/** Page background tokens (mirrors --c-bg-* in global.css; also used for <meta name="theme-color">). */
+export const pageBg = {
+  home: 'rgb(242, 242, 242)',
+  light: 'rgb(253, 253, 253)',
+  dark: 'rgb(22, 22, 22)',
+  white: 'rgb(255, 255, 255)',
+  black: 'rgb(0, 0, 0)',
+} as const;
+
 // Every case study lives at the root: naatz.co/<slug>
 // Old Framer URLs (/projects/<slug>) are 301-redirected in vercel.json.
 
@@ -31,7 +40,7 @@ export const projects: Project[] = [
       'How I designed and launched ocalendar, an event discovery platform for São Paulo, and grew it from 310 to 10,000+ users in 30 days.',
     cover: 'SildzOslWjiuO13oOeWwRFskBM.jpg',
     coverAlt: 'ocalendar app on an iPhone showing upcoming events in São Paulo',
-    bg: 'rgb(22, 22, 22)',
+    bg: pageBg.dark,
     theme: 'dark',
     year: '2024',
     role: 'Product Design, Brand Design, Business Strategy & SEO',
@@ -45,7 +54,7 @@ export const projects: Project[] = [
       'Redesigning Metabase’s setup flow to simplify onboarding for non-technical users: 12-week retention went from 70% to 78%.',
     cover: '3sLqHDmGspqv6PivTjk42OWr6PE.png',
     coverAlt: 'Metabase “We’re setting up your Metabase” screen with a progress bar',
-    bg: 'rgb(253, 253, 253)',
+    bg: pageBg.light,
     theme: 'light',
     year: '2022',
     role: 'Product Designer (UI/UX, Animation)',
@@ -59,7 +68,7 @@ export const projects: Project[] = [
       'As a Product Designer at Loft, I redesigned the data import process of James, a real estate data platform, so Operations could work autonomously.',
     cover: 'EScmyVYqkBI3MVOC1Kbxv7Crkbo.jpg',
     coverAlt: 'James platform “Edit location” screen with a map of buildings',
-    bg: 'rgb(22, 22, 22)',
+    bg: pageBg.dark,
     theme: 'dark',
     year: '2020',
     role: 'Product Designer',
@@ -73,7 +82,7 @@ export const projects: Project[] = [
       'Founding Designer at InYou, a habit tracker that combines DNA analysis with lifestyle habits to help people reach their health goals.',
     cover: 'G2joQblLhM9kaxit9uwfQMCk90.png',
     coverAlt: 'InYou habit tracker app on an iPhone',
-    bg: 'rgb(253, 253, 253)',
+    bg: pageBg.light,
     theme: 'light',
     year: '2020',
     role: 'Product Design, Branding',
@@ -87,7 +96,7 @@ export const projects: Project[] = [
       'I was the only Product Designer on Loft Renovation Hub, a back-office platform that centralized renovation budgets and costs in a single source.',
     cover: 'gjEPCHWLFUEst3PqSsXGK3bQiy4.png',
     coverAlt: 'Renovation Hub budget table interface',
-    bg: 'rgb(253, 253, 253)',
+    bg: pageBg.light,
     theme: 'light',
     year: '2020',
     role: 'Product Design',
@@ -101,7 +110,7 @@ export const projects: Project[] = [
       'Motion design and illustration for Olos’ “Automação de Estratégia” explainer video, showing how the feature automates actions on the platform.',
     cover: 'upmcNRHRx1EQ4VtCQqUh92JZvA.png',
     coverAlt: 'Isometric illustration of a tablet for the Olos automation video',
-    bg: 'rgb(255, 255, 255)',
+    bg: pageBg.white,
     theme: 'light',
     year: '2017',
     role: 'Motion Design & Illustration',

@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { projects, site } from '../data/projects';
+import { projects, site, pageBg } from '../data/projects';
 import { imgAttrs } from '../lib/transform';
 
 const avatar = imgAttrs('e88cz1fhYhgRfwqC3kjjVoI1fkw.jpeg');
@@ -21,7 +21,7 @@ const schema = [
   },
 ];
 ---
-<Base bg="rgb(242, 242, 242)" schema={schema} bodyClass="home" nav="home">
+<Base bg={pageBg.home} schema={schema} bodyClass="home" nav="home">
   <main id="content" class="home">
     <section class="intro" aria-labelledby="intro-title">
       <a href="/about" class="avatar" aria-label="About Nathalia" data-a="fade">
@@ -90,23 +90,23 @@ const schema = [
   .avatar { width: 96px; height: 96px; border-radius: 80px; overflow: hidden; display: block;
     transition: opacity .4s cubic-bezier(.25, .8, .3, 1.05); }
   .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .intro h1 { margin: 0; max-width: 590px; font-size: 24px; line-height: 1.3; font-weight: 400; color: rgb(23, 23, 23); }
+  .intro h1 { margin: 0; max-width: 590px; font-size: 24px; line-height: 1.3; font-weight: 400; color: var(--c-ink); }
   .intro h1 a { text-decoration: none; color: inherit; }
   .intro h1 a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-  .intro h1 a.muted { color: rgb(98, 103, 111); }
-  .links { display: none; margin: 0; gap: 10px; color: rgb(98, 103, 111); line-height: 1.6; }
+  .intro h1 a.muted { color: var(--c-text-muted); }
+  .links { display: none; margin: 0; gap: 10px; color: var(--c-text-muted); line-height: 1.6; }
   .links a { color: inherit; text-decoration: none; }
-  .see-work { position: fixed; left: 50%; bottom: 24px; translate: -50% 0; z-index: 40; font-size: 14px; line-height: 1.4; color: rgb(46, 46, 46); text-decoration: none;
+  .see-work { position: fixed; left: 50%; bottom: 24px; translate: -50% 0; z-index: 40; font-size: 14px; line-height: 1.4; color: var(--c-ink-soft); text-decoration: none;
     transition: opacity .4s cubic-bezier(.25, .8, .3, 1.05); }
   :global(html.nav-compact) .see-work { opacity: 0; pointer-events: none; }
   .grid-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
   .work { scroll-margin-top: 80px; }
   .contact { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
   .contact .emoji { margin: 0; font-size: 28px; line-height: 1.3; }
-  .contact h2 { margin: 0; font-size: 24px; font-weight: 500; line-height: 1.3; color: rgb(23, 23, 23); }
-  .contact .sub { margin: 0; color: rgb(128, 128, 128); line-height: 1.3; }
+  .contact h2 { margin: 0; font-size: 24px; font-weight: 500; line-height: 1.3; color: var(--c-ink); }
+  .contact .sub { margin: 0; color: var(--c-gray); line-height: 1.3; }
   .cal { width: 100%; min-height: 500px; margin-top: 16px; border-radius: 26px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .cal-fallback { color: rgb(46, 46, 46); }
+  .cal-fallback { color: var(--c-ink-soft); }
   @media (max-width: 1099.98px) { .home { padding-top: 360px; } }
   @media (max-width: 809.98px) {
     .home { padding-top: 60px; gap: 56px; }
