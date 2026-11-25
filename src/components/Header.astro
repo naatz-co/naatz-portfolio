@@ -134,20 +134,21 @@ const links = isHome
   .nv-home.no-t *, .nv-home.no-t { transition: none !important; }
 
   /* ---------- Case pages (in flow, fades down on load) ---------- */
-  .nv-case .nv-bar { max-width: 1400px; height: 80px; margin: 0 auto; padding: 0 76px; display: flex; align-items: center; justify-content: space-between;
+  .nv-case .nv-bar { height: 60px; padding: 20px 20px 0; display: flex; align-items: flex-start; justify-content: space-between;
     opacity: 0; transform: translateY(-20px); transition: opacity .8s cubic-bezier(.44, 0, .56, 1) .5s, transform .8s cubic-bezier(.44, 0, .56, 1) .5s; }
   :global(html:not(.js)) .nv-case .nv-bar, .nv-case.in .nv-bar { opacity: 1; transform: none; }
-  .nv-case .nv-logo img { display: block; width: 70.5px; height: auto; }
-  .nv-case { position: sticky; top: 0; transition: background-color .3s ease, box-shadow .3s ease; }
+  /* same spot as the compact home nav: logo at (20, 21) 71px wide, links top-right with 28px gaps */
+  .nv-case .nv-logo { margin-top: 1px; }
+  .nv-case .nv-logo img { display: block; width: 71px; height: auto; }
+  .nv-case { position: sticky; top: 0; margin-bottom: 20px; transition: background-color .3s ease, box-shadow .3s ease; }
   .nv-case.scrolled { background: color-mix(in srgb, var(--bg, var(--c-white)) 84%, transparent); -webkit-backdrop-filter: saturate(1.4) blur(16px); backdrop-filter: saturate(1.4) blur(16px); box-shadow: 0 1px 0 var(--c-line-soft); }
   :global(body.dark) .nv-case.scrolled { box-shadow: 0 1px 0 var(--c-line-on-dark-soft); }
-  .nv-case .nv-links { display: flex; gap: 16px; }
-  @media (max-width: 1099.98px) { .nv-case .nv-bar { padding: 0 40px; } }
-  @media (min-width: 1100px) { :global(body.case-olos-automation) .nv-case .nv-bar { padding: 0 48px; } }
+  .nv-case .nv-links { display: flex; gap: 28px; }
 
   /* ---------- Mobile: logo + burger + menu ---------- */
   @media (max-width: 809.98px) {
     .nv-home { height: auto; }
+    .nv-case { margin-bottom: 0; }
     .nv-home .nv-bar, .nv-case .nv-bar { height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
     .nv-home .nv-logo { position: static; width: auto; transform: none !important; transition: none; }
     .nv-home .nv-logo img, .nv-case .nv-logo img { width: 78px; }
