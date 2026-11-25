@@ -55,6 +55,20 @@ const schema = [
 </Base>
 
 <script>
+  // "See selected works": pinned 36px above the viewport bottom, but never on top of the cards
+  // (on short screens it sits just above the first row of cards instead).
+  const seeWork = document.querySelector<HTMLElement>('.see-work');
+  const work = document.getElementById('work');
+  if (seeWork && work) {
+    const place = () => {
+      const cardsTop = work.getBoundingClientRect().top + scrollY; // position at scroll 0
+      const free = innerHeight - cardsTop;                         // px of cards visible at load
+      seeWork.style.bottom = `${Math.max(36, free + 28)}px`;
+    };
+    place();
+    addEventListener('resize', place, { passive: true });
+    addEventListener('load', place);
+  }
   // Load the cal.com scheduler only when it is about to be seen (keeps the page fast)
   const box = document.getElementById('cal-embed');
   if (box) {
