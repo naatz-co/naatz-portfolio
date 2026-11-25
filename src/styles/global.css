@@ -228,7 +228,7 @@ body.dark .crumbs [aria-current] { color: var(--c-white); }
 .feat-item:last-child { border-bottom: 0; flex: 1; }
 .feat-item:last-child .feat-bar { bottom: 0; }
 .feat-item h3 { margin: 0; }
-.feat-item button { all: unset; box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 16px; padding: 32px 40px; cursor: pointer; font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -.2px; color: color-mix(in srgb, var(--c-on-dark-soft) 38%, transparent); transition: color .35s, padding-bottom .5s cubic-bezier(.44, 0, .56, 1); }
+.feat-item button { all: unset; box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 16px; padding: 32px 40px; cursor: pointer; font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -.2px; color: color-mix(in srgb, var(--c-on-dark-soft) 55%, transparent); transition: color .35s, padding-bottom .5s cubic-bezier(.44, 0, .56, 1); }
 .feat-item.on button { padding-bottom: 16px; }
 .feat-item button:hover, .feat-item.on button { color: var(--c-on-dark-soft); }
 .feat-item button:focus-visible { outline: 2px solid var(--c-on-dark-soft); outline-offset: -4px; border-radius: 8px; }
